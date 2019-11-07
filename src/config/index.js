@@ -51,7 +51,7 @@ export default {
   /**
    * 是否显示设置的底部信息
    */
-  showFooter: true,
+  showFooter: false,
 
   /**
    * 底部文字，支持html语法
