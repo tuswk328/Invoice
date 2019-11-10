@@ -75,7 +75,6 @@ service.interceptors.response.use(
         })
       })
     } else if (code === 403) {
-      alert(code)
       router.push({ path: '/401' })
     } else {
       const errorMsg = error.response.data.message

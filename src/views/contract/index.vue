@@ -45,7 +45,7 @@
                 <el-date-picker clearable v-model="query.endDate" type="date" placeholder="选择截止日期" ></el-date-picker>
               </el-col>
                  <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
-                 <!-- <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">重置</el-button> -->
+                  <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="reset">重置</el-button>
             </el-row>
 
       <!-- 新增 -->
@@ -160,6 +160,9 @@ export default {
     })
   },
   methods: {
+    reset(){
+      this.$set(this.query,'contractNo','')
+    },
     parseTime,
     checkPermission,
     beforeInit() {
@@ -209,6 +212,13 @@ export default {
       if(this.vertifys==''){
           this.$notify({
             title: '请选择要操作的数据',
+            type: 'error',
+            duration: 2500
+          })
+      }
+      else if(this.vertifys.length>1){
+          this.$notify({
+            title: '请选择一条数据',
             type: 'error',
             duration: 2500
           })
@@ -287,7 +297,6 @@ export default {
         })
          this.downloadLoading = false
       }
-
     },
     // 数据转换
     formatJson(filterVal, jsonData) {

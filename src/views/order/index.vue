@@ -2,50 +2,43 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container demo-input-suffix">
-      <el-row type="flex" class="row-bg" justify="space-around" >
-         <el-col >
+      <el-row >
+         <el-col :span="6" >
            合同编号:
-            <el-input v-model="query.name" clearable placeholder="请输入合同号" style="width: 300px;" class="filter-item" @keyup.enter.native="toQuery"/>
+            <el-input v-model="query.contractNo" clearable placeholder="请输入合同号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
          </el-col>
-         <el-col >
+         <el-col :span="6"  >
            运输清单号:
-            <el-input v-model="query.name" clearable placeholder="请输入运输清单号" style="width: 300px;" class="filter-item" @keyup.enter.native="toQuery"/>
+            <el-input v-model="query.lotNo" clearable placeholder="请输入运输清单号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
          </el-col>
-         <el-col>
+         <el-col :span="6" >
             收货单位:
-          <el-select v-model="query.value" filterable placeholder="请选择收货单位">
+          <el-select v-model="query.consigneeName" clearable filterable placeholder="请选择收货单位" style="width: 200px;">
               <el-option
-                v-for="item in options1"
+                v-for="item in consigneeName"
                 :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :label="item.consigneeName"
+                :value="item.consigneeName">
               </el-option>
           </el-select>
          </el-col>
-      </el-row>
-      <el-row type="flex" class="row-bg" justify="space-around">
-         <el-col >
-           <div class="block">
-             合同时间:
-             <el-date-picker
-               v-model="query.name"
-               type="daterange"
-               align="right"
-               unlink-panels
-               range-separator="——"
-               start-placeholder="开始日期"
-               end-placeholder="结束日期"
-               :picker-options="pickerOptions" style="width: 300px;" >
-             </el-date-picker>
-          </div>
-         </el-col>
-         <el-col >
+         <el-col :span="6"  class="filter-item">
            车牌号:
-           <el-input v-model="query.name" clearable placeholder="请输入车牌号码" style="width: 300px;" class="filter-item" @keyup.enter.native="toQuery"/>
+           <el-input v-model="query.headLicense" clearable placeholder="请输入车牌号码" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery"/>
          </el-col>
-         <el-col >
+      </el-row>
+      <el-row >
+          <el-col :span="6"  class="filter-item">
+            开始时间:
+            <el-date-picker style="width: 200px;" clearable v-model="query.startDate" type="date" placeholder="选择开始日期"></el-date-picker>&nbsp;&nbsp;&nbsp;-
+          </el-col>
+          <el-col :span="6"  class="filter-item">
+            结束时间:
+            <el-date-picker style="width: 200px;" clearable v-model="query.endDate" type="date" placeholder="选择截止日期" ></el-date-picker>
+          </el-col>
+         <el-col :span="6"  >
            合同状态:
-           <el-select v-model="query.status"  clearable placeholder="请输入合同状态" class="filter-item" @keyup.enter.native="toQuery" style="width: 300px;">
+           <el-select v-model="query.consignmentStatus"  clearable placeholder="请输入合同状态"  @keyup.enter.native="toQuery">
                <el-option
                  v-for="item in options"
                  :key="item.value"
@@ -62,52 +55,52 @@
         <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">重置</el-button>
       </el-col>
     </el-row>
+    <!-- 导出 -->
+    <div style="display: inline-block;">
+      <el-button
+        v-permission="['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EXPORT']"
+        :loading="downloadLoading"
+        size="mini"
+        class="filter-item"
+        type="warning"
+        icon="el-icon-download"
+        @click="download">导出</el-button>
+    </div>
     <!--表格渲染-->
-    <el-table v-loading="loading" :data="data" size="small" style="width: 100%;">
-      <el-table-column label="合同号" width="85" align="center"/>
-      <el-table-column  prop="status" label="合同状态">
-          <template slot-scope="scope">
-            <span>{{scope.row.status==1?'启用':'作废'}}</span>
-          </template>
-      </el-table-column>
-      <el-table-column  prop="engine" label="运输清单号"/>
-      <el-table-column  prop="coding" label="托运单号"/>
-      <el-table-column  prop="status" label="托运单状态">
-          <template slot-scope="scope">
-            <span>{{scope.row.status==1?'启用':'作废'}}</span>
-          </template>
-      </el-table-column>
-      <el-table-column prop="createTime" label="运单创建日期">
+    <el-table @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
+      <el-table-column width="55" type="selection"/>
+      <el-table-column label="合同号" prop="contractNo" />
+      <el-table-column  prop="contractStatus" label="合同状态"/>
+      <el-table-column  prop="lotNo" label="运输清单号"/>
+      <el-table-column  prop="systemOrderId" label="托运单号"/>
+      <el-table-column  prop="consignmentStatus" label="托运单状态"/>
+      <el-table-column prop="createDate" label="运单创建日期">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTime(scope.row.createDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="下单时间">
+      <el-table-column prop="orderDate" label="下单时间">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTime(scope.row.orderDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column  prop="engine" label="发货单位"/>
-      <el-table-column  prop="engine" label="收货单位"/>
-      <el-table-column  prop="engine" label="货物名称"/>
-      <el-table-column  prop="engine" label="件数"/>
-      <el-table-column  prop="engine" label="起站"/>
-      <el-table-column  prop="engine" label="到站"/>
-      <el-table-column  prop="engine" label="车辆信息"/>
-      <el-table-column  prop="engine" label="司机信息"/>
-      <el-table-column prop="createTime" label="发车时间">
+      <el-table-column  prop="shipperName" label="发货单位"/>
+      <el-table-column  prop="consigneeName" label="收货单位"/>
+      <el-table-column  prop="cargoName" label="货物名称"/>
+      <el-table-column  prop="cargoCount" label="件数"/>
+      <el-table-column  prop="departStation" label="起站"/>
+      <el-table-column  prop="arriveStation" label="到站"/>
+      <el-table-column  prop="headLicense" label="车辆信息"/>
+      <el-table-column  prop="driverName" label="司机信息"/>
+      <el-table-column prop="departDate" label="发车时间">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTime(scope.row.departDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="result" label="投保结果">
-        <template slot-scope="scope">
-          <span>投保结果</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="createTime" label="失败原因"/>
-      <el-table-column prop="createTime" label="确认金额"/>
-      <el-table-column prop="createTime" label="投保金额"/>
+      <el-table-column prop="insureResult" label="投保结果"/>
+      <el-table-column prop="insureReasons" label="失败原因"/>
+      <el-table-column prop="insureMoney" label="确认金额"/>
+      <el-table-column prop="confirmationAmount" label="投保金额"/>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -123,53 +116,23 @@
 <script>
 import initData from '@/mixins/initData'
 import { parseTime } from '@/utils/index'
+import { findByOrder,findByconsigneeName } from '@/api/order'
+
 export default {
   mixins: [initData],
   data() {
     return {
-       pickerOptions: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近三个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-            picker.$emit('pick', [start, end]);
-          }
-        }]
-      },
-      value2: [],
+      orderList:[],//保存选中的集合
+      downloadLoading:false,//加载中
+      multipleSelection: [],
       options: [{
-        value: '1',
+        value: '已确认',
         label: '已确认'
       }, {
-        value: '2',
+        value: '已撤回',
         label: '已撤回'
       }],
-      options1: [{
-        value: '1',
-        label: '大润发'
-      }, {
-        value: '2',
-        label: '大润发'
-      }],
-      value: ''
+     consigneeName:[],//收货单位集合
     }
   },
   created() {
@@ -178,20 +141,76 @@ export default {
     })
   },
   mounted() {
-        this.restaurants = this.loadAll();
+    this.findByconsigneeName()//查询收货单位
       },
   methods: {
     parseTime,
     beforeInit() {
-      this.url = 'api/generator/tables'
+      this.url = 'api/findByOrder'
       const query = this.query
-      const name = query.name
+      const contractNo = query.contractNo
+      const lotNo = query.lotNo
+      const consigneeName = query.consigneeName
+      const startDate = query.startDate
+      const endDate = query.endDate
+      const headLicense = query.headLicense
+      const consignmentStatus = query.consignmentStatus
       this.params = { page: this.page, size: this.size }
-      if (name) { this.params['name'] = name }
+     if (contractNo) { this.params['contractNo'] = contractNo }
+     if (lotNo) { this.params['lotNo'] = lotNo }
+     if (consigneeName) { this.params['consigneeName'] = consigneeName }
+     if (startDate) { this.params['startDate'] = parseTime(startDate) }
+     if (endDate) { this.params['endDate'] = parseTime(endDate) }
+     if (headLicense) { this.params['headLicense'] = headLicense }
+     if (consignmentStatus) { this.params['consignmentStatus'] = consignmentStatus }
       return true
     },
     cancel() {
       this.resetForm()
+    },
+    // 导出
+    download() {
+      if(this.orderList==''){
+          this.$notify({
+            title: '请选择要操作的数据',
+            type: 'error',
+            duration: 2500
+          })
+      }else{
+        this.downloadLoading = true
+
+        import('@/utils/export2Excel').then(excel => {
+          const tHeader = ['合同编号', '合同状态','运输清单号', '托运单号', '托运单状态', '运单创建日期', '下单时间', '发货单位', '收货单位','货物名称','件数','起站','到站','车辆信息','司机信息','发车时间','投保结果','失败原因','确认金额','投保金额']
+         const filterVal= ['contractNo','contractStatus','lotNo', 'systemOrderId','consignmentStatus', 'createDate', 'orderDate', 'shipperName', 'consigneeName','cargoName','cargoCount','departStation','arriveStation','headLicense','driverName','departDate','insureResult','insureReasons','insureMoney','confirmationAmount']
+          const data = this.formatJson(filterVal, this.orderList)
+          excel.export_json_to_excel({
+            header: tHeader,  //表头
+            data,             //数据
+            filename: '订单管理_'+this.parseTime(new Date()) //文件名
+          })
+        })
+         this.downloadLoading = false
+      }
+    },
+    // 数据转换
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'createDate' || j === 'orderDate' || j=== 'departDate') {
+          return parseTime(v[j])
+        }
+         else {
+          return v[j]
+        }
+      }))
+    },
+    //批量操作
+    handleSelectionChange(val) {
+    var orderList=[]
+        this.multipleSelection = val;
+        for (var i = 0; i < this.multipleSelection.length; i++) {
+          orderList.push(this.multipleSelection[i])
+        }
+        this.orderList=orderList
     },
     doSubmit() {
       this.$refs['form'].validate((valid) => {
@@ -203,6 +222,13 @@ export default {
         }
       })
     },
+    findByconsigneeName(){
+          findByconsigneeName().then(res => {
+            this.consigneeName=res
+          }).catch(err => {
+             console.log(err.response.data.message)
+          })
+      }
   }
 }
 </script>
