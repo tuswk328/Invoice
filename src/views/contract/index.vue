@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!--表单组件-->
-    <eForm ref="form" :is-add="isAdd" :dictMap="dictMap"/>
+    <eForm ref="form" :isAdd="isAdd" :dictMap="dictMap"/>
     <el-row :gutter="24">
       <el-col :xs="17" :sm="18" :md="20" :lg="24" :xl="24">
     <!--工具栏-->
@@ -9,11 +9,11 @@
       <!-- 搜索 -->
             <el-row >
              <el-col :span="6"  class="filter-item">
-              合同号:
+               <span class="label">合同号:</span>
                <el-input v-model="query.contractNum" clearable placeholder="请输入合同号" style="width: 200px;" @keyup.enter.native="toQuery"/>
              </el-col>
              <el-col :span="6"  class="filter-item">
-              受票人:
+               <span class="label">受票人:</span>
               <el-select filterable  v-model="query.drawwe" clearable placeholder="请选择受票人" >
                   <el-option
                     v-for="item in drawweList"
@@ -24,7 +24,7 @@
               </el-select>
              </el-col>
              <el-col :span="6"  class="filter-item">
-              承运方:
+              <span class="label">承运方:</span>
               <el-select filterable  v-model="query.carrier"  clearable placeholder="请输入承运方"  @keyup.enter.native="toQuery" style="width: 200px;">
                   <el-option
                     v-for="item in dictMap.carrier"
@@ -37,11 +37,11 @@
             </el-row>
             <el-row >
               <el-col :span="6"  class="filter-item">
-                开始时间:
+                <span class="label">开始时间:</span>
                 <el-date-picker clearable style="width: 200px;" v-model="query.startDate"  type="date" placeholder="选择开始日期"></el-date-picker>
               </el-col>
               <el-col :span="6"  class="filter-item">
-                结束时间:
+                <span class="label">结束时间:</span>
                 <el-date-picker style="width: 200px;" clearable v-model="query.endDate"  type="date" placeholder="选择截止日期" ></el-date-picker>
               </el-col>
             </el-row>
@@ -87,7 +87,11 @@
     <!--表格渲染-->
     <el-table @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection"/>
-      <el-table-column prop="contractNo" label="合同编号"/>
+      <el-table-column label="合同编号">
+      <template  slot-scope="scope">
+        <a style="font-weight: 700;"  @click="edit(scope.row)">{{scope.row.contractNo}}</a>
+      </template>
+      </el-table-column>
       <el-table-column prop="contractStatusName" label="合同状态"/>
       <el-table-column prop="createDate" label="合同创建日期" width="120">
         <template slot-scope="scope">
@@ -114,11 +118,6 @@
            <a v-if="scope.row.contractImage!=null" :href="scope.row.contractImage" target="_blank">查看</a>
          </span>
        </template>
-      </el-table-column>
-      <el-table-column v-if="checkPermission(['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EDIT','PARKPEVENUE_DELETE'])" label="操作" width="150px" align="center">
-        <template slot-scope="scope">
-          <el-button v-permission="['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
-        </template>
       </el-table-column>
     </el-table>
     <!--分页组件-->
@@ -149,9 +148,10 @@ export default {
   data() {
     return {
       contractList:[],//保存已勾选的合同集合
-      drawweList:[],
+      drawweList:[],//受票人集合
       delLoading: false,
       vertifys:[],//保存审核的集合
+      cancelId:'',//保存作废合同id
       downloadLoading:false,//审核加载中
       multipleSelection: [],
     }
@@ -169,8 +169,7 @@ export default {
       this.$set(this.query,'drawwe','')
       this.$set(this.query,'carrier','')
       this.$set(this.query,'startDate',null)
-      this.$set(this.query,'startDate',null)
-
+      this.$set(this.query,'endDate',null)
        this.init()
     },
     parseTime,
@@ -184,13 +183,13 @@ export default {
       const drawwe = query.drawwe
       const startDate = query.startDate
       const endDate = query.endDate
-  this.params = { page: this.page, size: this.size, sort: sort}
+      this.params = { page: this.page, size: this.size, sort: sort}
       //最高级别查询所有数据
 	    if (contractNum) { this.params['contractNum'] = contractNum }
       if (drawwe) { this.params['drawwe'] = drawwe }
       if (carrier) { this.params['carrier'] = carrier }
-      if (startDate) { this.params['startDate'] = new Date(startDate) }
-      if (endDate) { this.params['endDate'] =  new Date(endDate) }
+      if (startDate) { this.params['startDate'] = parseTime(startDate) }
+      if (endDate) { this.params['endDate'] =  parseTime(endDate) }
       return true
     },
     subDelete(id) {
@@ -212,14 +211,12 @@ export default {
       })
     },
     add() {
-      this.isAdd = true
+      this.isAdd = false
       this.$refs.form.dialog = true
     },
     //作废
     cancel() {
-      this.isAdd = false
       const _this = this.$refs.form
-
       if(this.vertifys==''){
           this.$notify({
             title: '请选择要操作的数据',
@@ -240,10 +237,7 @@ export default {
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              var id=''
-              id=this.vertifys[0]
-              
-               bindingContractCancel(id).then(res => {
+               bindingContractCancel(this.vertifys[0]).then(res => {
                  this.$notify({
                    title: '操作成功',
                    type: 'success',
@@ -260,7 +254,7 @@ export default {
     },
     //查看详情
     edit(data){
-      this.isAdd = false
+      this.isAdd = true
       const _this = this.$refs.form
       _this.form = {
         id: data.id,
@@ -279,6 +273,7 @@ export default {
         contractStatusId:data.contractStatusId,
         creator:data.creator
       }
+      _this.imageFrontUrl=data.contractImage
        _this.dialog = true
     },
     //查询受票人
@@ -340,5 +335,9 @@ export default {
 </script>
 
 <style scoped>
-
+.label{
+  display: inline-block;
+  width: 80px;
+  text-align: right;
+}
 </style>

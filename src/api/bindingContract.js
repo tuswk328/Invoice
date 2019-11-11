@@ -23,11 +23,11 @@ export function getBindingContractByDrawwe() {
 }
 
 
-export function bindingContractCancel(data) {
+export function bindingContractCancel(id) {
   return request({
-    url: 'api/bindingContractCancel',
-    method: 'post',
-    data
+    url: 'api/bindingContractCancel/'+id,
+    method: 'get',
+    id
   })
 }
 

@@ -1,28 +1,28 @@
 <template>
-  <el-dialog :append-to-body="true" :visible.sync="dialog" :before-close="resetForm" :title="isAdd ? '新增合同' : '编辑合同'" width="600px">
+  <el-dialog :append-to-body="true" :visible.sync="dialog" :before-close="resetForm" :title="isAdd ? '新增合同' : '编辑合同'" width="700px">
     <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
       <el-divider content-position="left">合同信息</el-divider>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="合同年度" prop="contractYear">
-            <el-input v-model="form.contractYear" style="width: 170px;"/>
+          <el-form-item label="合同年度" prop="contractYear" label-width="120px">
+            <el-input :disabled="isAdd" v-model="form.contractYear" style="width: 170px;"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="合同号" >
-            <el-input v-model="form.contractNum" style="width: 170px;"/>
+          <el-form-item label="合同号" label-width="120px">
+            <el-input :disabled="isAdd" v-model="form.contractNum" style="width: 170px;"/>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="甲方" prop="drawwe">
-            <el-input v-model="form.drawwe" style="width: 170px;"/>
+          <el-form-item label="甲方" prop="drawwe" label-width="120px">
+            <el-input :disabled="isAdd" v-model="form.drawwe" style="width: 170px;"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="乙方" prop="carrierId">
-           <el-select v-model="form.carrierId"  placeholder="请选择承运方" style="width: 170px;">
+          <el-form-item label="乙方" prop="carrierId" label-width="120px">
+           <el-select :disabled="isAdd" v-model="form.carrierId"  placeholder="请选择承运方" style="width: 170px;">
              <el-option  v-for="(item, index) in dictMap.carrier"
                :key="item.index"
                :label="item.label"
@@ -34,27 +34,27 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="纳税人识别号" prop="identificationNumber">
-            <el-input v-model="form.identificationNumber" style="width: 170px;"/>
+          <el-form-item label="纳税人识别号" prop="identificationNumber" label-width="120px">
+            <el-input :disabled="isAdd" v-model="form.identificationNumber" style="width: 170px;"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-           <el-form-item label="申请日期" prop="createDate">
-             <el-date-picker  v-model="form.createDate" type="date" placeholder="选择日期" style="width: 170px;">
+           <el-form-item label="申请日期" prop="createDate" label-width="120px">
+             <el-date-picker :disabled="isAdd"   v-model="form.createDate" type="date" placeholder="选择日期" style="width: 170px;">
              </el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="生效日期" prop="startDate">
-            <el-date-picker :picker-options="pickerOptions0" v-model="form.startDate" type="date" placeholder="选择日期" style="width: 170px;">
+          <el-form-item label="生效日期" prop="startDate" label-width="120px">
+            <el-date-picker :disabled="isAdd" :picker-options="pickerOptions0" v-model="form.startDate" type="date" placeholder="选择日期" style="width: 170px;">
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="失效日期" prop="endDate">
-            <el-date-picker :picker-options="pickerOptions1" v-model="form.endDate" type="date" placeholder="选择日期" style="width: 170px;">
+          <el-form-item label="失效日期" prop="endDate" label-width="120px">
+            <el-date-picker :disabled="isAdd" :picker-options="pickerOptions1" v-model="form.endDate" type="date" placeholder="选择日期" style="width: 170px;">
             </el-date-picker>
           </el-form-item>
         </el-col>
@@ -62,28 +62,28 @@
       <el-row>
         <el-col :span="24">
           <el-form-item label="合同名称" >
-             <el-input v-model="form.contractName" />
+             <el-input v-model="form.contractName" :disabled="isAdd" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
           <el-form-item label="合同标题" >
-             <el-input v-model="form.contractTitle" />
+             <el-input v-model="form.contractTitle" :disabled="isAdd" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
           <el-form-item label="合同内容">
-           <el-input type="textarea" rows="8" v-model="form.contractText" />
+           <el-input type="textarea" rows="8" v-model="form.contractText" :disabled="isAdd"/>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
           <el-form-item label="备注" >
-            <el-input type="textarea" rows="5" v-model="form.contractRemark" />
+            <el-input type="textarea" rows="5" v-model="form.contractRemark" :disabled="isAdd"/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -93,7 +93,7 @@
           <el-form-item label="文件名" >
           <el-upload
             class="avatar-uploader"
-            v-show="imageFrontUrl == ''"
+            v-show="imageFrontUrl == null"
             name="upfile"
             drag
             :headers="headers"
@@ -103,10 +103,10 @@
             multiple>
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">
-            <p v-if="imageFrontFile != ''">文件名称: {{ imageFrontFile.name }}</p>
+            <p v-if="imageFrontFile != null">文件名称: {{ imageFrontFile.name }}</p>
             <p v-else>点击或拖拽文件上传</p></div>
           </el-upload>
-            <div v-if="imageFrontUrl != ''">
+            <div v-if="imageFrontUrl != null">
               <a  :href="imageFrontUrl" target="_blank" style="font-size: 20px;"><i class="el-icon-folder"></i>
               </a>{{ imageFrontFile.name }}&nbsp;&nbsp;<i class="el-icon-circle-check" style="color: green;">
               </i>
@@ -117,7 +117,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <div slot="footer" class="dialog-footer">
+    <div slot="footer" class="dialog-footer" v-if="!isAdd">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
     </div>
@@ -155,7 +155,7 @@ export default {
               return time.getTime() < new Date(this.form.startDate).getTime();//减去一天的时间代表可以选择同一天;
           }
       },
-      imageFrontUrl:'', //文件上传路径
+      imageFrontUrl:null, //文件上传路径
       imageFrontFile:'',//接受文件上传的参数
       isShowUploading: false,//文件上传加载中
       headers: {//设置请求头
@@ -195,13 +195,13 @@ export default {
           { required: true, message: '请输入承运方', trigger: 'change' }
         ],
         startDate: [
-          { type: 'date', required: true, message: '请选择开始日期', trigger: 'change' }
+          {  required: true, message: '请选择开始日期', trigger: 'change' }
         ],
         endDate: [
-          { type: 'date', required: true, message: '请选择截止日期', trigger: 'change' }
+          { required: true, message: '请选择截止日期', trigger: 'change' }
         ],
         createDate: [
-          { type: 'date', required: true, message: '请选择申请日期', trigger: 'change' }
+          {  required: true, message: '请选择申请日期', trigger: 'change' }
         ],
       }
     }
@@ -215,8 +215,9 @@ export default {
         if (valid) {
            this.loading=true;
         if (this.isAdd) {
-          this.doAdd()
-        } else this.doEdit()
+          this.doEdit()
+        } else
+              this.doAdd()
         } else {
           return false
         }
@@ -303,7 +304,7 @@ export default {
             } else {
               store.dispatch('GetInfo').then(res => {
                  upload(fileData,'CU'+res.username).then(res => {
-                   this.form.fileName=res
+                   this.form.contractImage=res
                    this.imageFrontUrl=res
                    this.isShowUploading=false
                    this.loading= false
@@ -335,7 +336,7 @@ export default {
     },
     //清除文件
     clearFile(){
-        this.imageFrontUrl = '';
+        this.imageFrontUrl = null;
         this.form.fileName = '';
         this.imageFrontFile = '';
     },

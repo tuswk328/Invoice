@@ -1,55 +1,52 @@
 <template>
   <div class="app-container">
     <!--表单组件-->
-    <eForm ref="form" />
+    <!-- <eForm ref="form" /> -->
     <!--工具栏-->
     <div class="head-container">
       <el-row>
-         <el-col  :span="6">
-           受票人:
-           <el-select v-model="query.value"  filterable placeholder="请选择受票人">
+         <el-col  :span="6"  class="filter-item">
+           <span class="label">受票人:</span>
+           <el-select v-model="query.drawwe" clearable filterable placeholder="请选择受票人" style="width: 200px;" @keyup.enter.native="toQuery">
                <el-option
-                 v-for="item in options"
-                 :key="item.value"
-                 :label="item.label"
-                 :value="item.value">
+                 v-for="item in drawweList"
+                 :key="item.id"
+                 :label="item.drawwe"
+                 :value="item.drawwe">
                </el-option>
            </el-select>
          </el-col>
-         <el-col class="row-bg" justify="space-around" :span="6">
-           承运方:
-           <el-select v-model="query.status"  clearable placeholder="请输入承运方" @keyup.enter.native="toQuery" style="width: 200px;">
+         <el-col :span="6"  class="filter-item">
+          <span class="label"> 承运方:</span>
+           <el-select filterable  v-model="query.carrier"  clearable placeholder="请输入承运方"  @keyup.enter.native="toQuery" style="width: 200px;">
                <el-option
-                 v-for="item in options1"
+                 v-for="item in dictMap.carrier"
                  :key="item.value"
                  :label="item.label"
-                 :value="item.value" >
+                 :value="item.id" >
                </el-option>
            </el-select>
          </el-col>
       </el-row>
-      <el-row style="margin-top: 20px;">
+      <el-row >
          <el-col :span="6">
            合同号:
-            <el-input v-model="query.name" clearable placeholder="请输入收货单位" style="width: 200px;"  @keyup.enter.native="toQuery"/>
+            <el-input v-model="query.contNo" clearable placeholder="请输入合同号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
          </el-col>
-         <el-col :span="10">
-           <div class="block" >
-             合同时间:
-             <el-date-picker
-               v-model="query.name"
-               type="daterange"
-               align="right"
-               unlink-panels
-               range-separator="——"
-               start-placeholder="开始日期"
-               end-placeholder="结束日期"
-               :picker-options="pickerOptions" style="width: 300px;" >
-             </el-date-picker>
-          </div>
-         </el-col>
-         <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
-         <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">重置</el-button>
+        <el-col :span="6"  class="filter-item">
+         <span class="label" > 开始时间:</span>
+          <el-date-picker clearable style="width: 200px;" v-model="query.startDate"  type="date" placeholder="选择开始日期"></el-date-picker>
+        </el-col>
+        <el-col :span="6"  class="filter-item">
+          结束时间:
+          <el-date-picker style="width: 200px;" clearable v-model="query.endDate"  type="date" placeholder="选择截止日期" ></el-date-picker>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col  :offset="20">
+          <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
+          <el-button  class="filter-item" size="mini" type="primary" icon="el-icon-refresh-left" @click="reset('ruleForm')">重置</el-button>
+        </el-col>
       </el-row>
       <!-- 审核 -->
       <div style="display: inline-block;margin: 0px 2px;">
@@ -100,58 +97,18 @@
 
 <script>
 import initData from '@/mixins/initData'
+import initDict from '@/mixins/initDict'
 import eForm from './form'
 import { parseTime } from '@/utils/index'
 export default {
   components: { eForm },
-  mixins: [initData],
+  mixins: [initData,initDict],
   data() {
     return {
+      drawweList:[],//受票人集合
       vertifys:[],//保存选中的那个id
       multipleSelection: [],
-       pickerOptions: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近三个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-            picker.$emit('pick', [start, end]);
-          }
-        }]
-      },
-      value2: [],
-      options: [{
-        value: '1',
-        label: '受票人1'
-      }, {
-        value: '2',
-        label: '受票人2'
-      }],
-      options1: [{
-        value: '1',
-        label: '承运方1'
-      }, {
-        value: '2',
-        label: '承运方2'
-      }],
-      value: ''
+      vertifyLoading:false
     }
   },
   created() {
@@ -166,13 +123,29 @@ export default {
     beforeInit() {
       this.url = 'api/dict'
       const query = this.query
-      const name = query.name
+      const carrier = query.carrier
+      const drawwe = query.drawwe
+      const contNo = query.contNo
+      const startDate = query.startDate
+      const endDate = query.endDate
       this.params = { page: this.page, size: this.size }
-      if (name) { this.params['name'] = name }
+      if (drawwe) { this.params['drawwe'] = drawwe }
+      if (carrier) { this.params['carrier'] = carrier }
+      if (contNo) { this.params['contNo'] = contNo }
+      if (startDate) { this.params['startDate'] = parseTime(startDate) }
+      if (endDate) { this.params['endDate'] = parseTime(endDate) }
       return true
     },
     cancel() {
       this.resetForm()
+    },
+    reset(){
+      this.$set(this.query,'contractNum','')
+      this.$set(this.query,'drawwe','')
+      this.$set(this.query,'contNo','')
+      this.$set(this.query,'startDate',null)
+      this.$set(this.query,'endDate',null)
+       this.init()
     },
    //批量操作
    handleSelectionChange(val) {
@@ -217,5 +190,9 @@ export default {
 </script>
 
 <style scoped>
-
+.label{
+  display: inline-block;
+  width: 80px;
+  text-align: right;
+}
 </style>
