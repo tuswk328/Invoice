@@ -10,7 +10,7 @@
             <el-row >
              <el-col :span="6"  class="filter-item">
               合同号:
-               <el-input v-model="query.contractNo" clearable placeholder="请输入合同号" style="width: 200px;" @keyup.enter.native="toQuery"/>
+               <el-input v-model="query.contractNum" clearable placeholder="请输入合同号" style="width: 200px;" @keyup.enter.native="toQuery"/>
              </el-col>
              <el-col :span="6"  class="filter-item">
               受票人:
@@ -38,14 +38,18 @@
             <el-row >
               <el-col :span="6"  class="filter-item">
                 开始时间:
-                <el-date-picker clearable v-model="query.startDate" type="date" placeholder="选择开始日期"></el-date-picker>&nbsp;&nbsp;&nbsp;-
+                <el-date-picker clearable style="width: 200px;" v-model="query.startDate"  type="date" placeholder="选择开始日期"></el-date-picker>
               </el-col>
               <el-col :span="6"  class="filter-item">
                 结束时间:
-                <el-date-picker clearable v-model="query.endDate" type="date" placeholder="选择截止日期" ></el-date-picker>
+                <el-date-picker style="width: 200px;" clearable v-model="query.endDate"  type="date" placeholder="选择截止日期" ></el-date-picker>
               </el-col>
-                 <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
-                  <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="reset">重置</el-button>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col  :offset="20">
+                <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
+                <el-button  class="filter-item" size="mini" type="primary" icon="el-icon-refresh-left" @click="reset('ruleForm')">重置</el-button>
+              </el-col>
             </el-row>
 
       <!-- 新增 -->
@@ -90,7 +94,7 @@
           <span>{{ parseTime(scope.row.createDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="contractNo" label="合同号"/>
+      <el-table-column prop="contractNum" label="合同号"/>
       <el-table-column prop="drawwe" label="客户名称"/>
       <el-table-column prop="carrierName" label="承运方"/>
       <el-table-column prop="startDate" label="生效日期">
@@ -161,7 +165,13 @@ export default {
   },
   methods: {
     reset(){
-      this.$set(this.query,'contractNo','')
+      this.$set(this.query,'contractNum','')
+      this.$set(this.query,'drawwe','')
+      this.$set(this.query,'carrier','')
+      this.$set(this.query,'startDate',null)
+      this.$set(this.query,'startDate',null)
+
+       this.init()
     },
     parseTime,
     checkPermission,
@@ -169,18 +179,18 @@ export default {
       this.url = 'api/bindingContract'
       const sort = 'id,desc'
       const query = this.query
-      const contractNo = query.contractNo
+      const contractNum = query.contractNum
       const carrier = query.carrier
       const drawwe = query.drawwe
       const startDate = query.startDate
       const endDate = query.endDate
   this.params = { page: this.page, size: this.size, sort: sort}
       //最高级别查询所有数据
-	    if (contractNo) { this.params['contractNo'] = contractNo }
+	    if (contractNum) { this.params['contractNum'] = contractNum }
       if (drawwe) { this.params['drawwe'] = drawwe }
       if (carrier) { this.params['carrier'] = carrier }
-      if (startDate) { this.params['startDate'] = parseTime(startDate) }
-      if (endDate) { this.params['endDate'] = parseTime(endDate) }
+      if (startDate) { this.params['startDate'] = new Date(startDate) }
+      if (endDate) { this.params['endDate'] =  new Date(endDate) }
       return true
     },
     subDelete(id) {
@@ -205,6 +215,7 @@ export default {
       this.isAdd = true
       this.$refs.form.dialog = true
     },
+    //作废
     cancel() {
       this.isAdd = false
       const _this = this.$refs.form
@@ -229,7 +240,10 @@ export default {
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-               bindingContractCancel(this.vertifys).then(res => {
+              var id=''
+              id=this.vertifys[0]
+              
+               bindingContractCancel(id).then(res => {
                  this.$notify({
                    title: '操作成功',
                    type: 'success',
@@ -244,7 +258,7 @@ export default {
             });
          }
     },
-    //修改
+    //查看详情
     edit(data){
       this.isAdd = false
       const _this = this.$refs.form
@@ -255,7 +269,7 @@ export default {
         startDate: data.startDate,
         endDate: data.endDate,
         createDate: data.createDate,
-        contractNo: data.contractNo,
+        contractNum: data.contractNum,
         contractTitle: data.contractTitle,
         contractName: data.contractName,
         contractText:  data.contractText,
@@ -287,7 +301,7 @@ export default {
         this.downloadLoading = true
         import('@/utils/export2Excel').then(excel => {
           const tHeader = ['合同编号', '合同状态','合同创建日期', '合同号', '客户名称', '承运方', '生效日期', '失效日期', '制单人', ]
-          const filterVal = ['contractNo', 'contractStatusName','createDate', 'contractNo','drawwe', 'carrierName', 'startDate', 'endDate', 'creatorName']
+          const filterVal = ['contractNo', 'contractStatusName','createDate', 'contractNum','drawwe', 'carrierName', 'startDate', 'endDate', 'creatorName']
           const data = this.formatJson(filterVal, this.contractList)
           excel.export_json_to_excel({
             header: tHeader,  //表头

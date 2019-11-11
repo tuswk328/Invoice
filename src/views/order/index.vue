@@ -52,7 +52,7 @@
     <el-row :gutter="20">
       <el-col  :offset="20">
         <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
-        <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">重置</el-button>
+        <el-button  class="filter-item" size="mini" type="primary" icon="el-icon-refresh-left" @click="reset('ruleForm')">重置</el-button>
       </el-col>
     </el-row>
     <!-- 导出 -->
@@ -178,7 +178,6 @@ export default {
           })
       }else{
         this.downloadLoading = true
-
         import('@/utils/export2Excel').then(excel => {
           const tHeader = ['合同编号', '合同状态','运输清单号', '托运单号', '托运单状态', '运单创建日期', '下单时间', '发货单位', '收货单位','货物名称','件数','起站','到站','车辆信息','司机信息','发车时间','投保结果','失败原因','确认金额','投保金额']
          const filterVal= ['contractNo','contractStatus','lotNo', 'systemOrderId','consignmentStatus', 'createDate', 'orderDate', 'shipperName', 'consigneeName','cargoName','cargoCount','departStation','arriveStation','headLicense','driverName','departDate','insureResult','insureReasons','insureMoney','confirmationAmount']
@@ -222,12 +221,24 @@ export default {
         }
       })
     },
+    //查询到货单位
     findByconsigneeName(){
           findByconsigneeName().then(res => {
             this.consigneeName=res
           }).catch(err => {
              console.log(err.response.data.message)
           })
+      },
+      //重置
+      reset(){
+          this.$set(this.query,'contractNo','')
+          this.$set(this.query,'lotNo','')
+          this.$set(this.query,'consigneeName','')
+          this.$set(this.query,'startDate',null)
+          this.$set(this.query,'endDate',null)
+          this.$set(this.query,'headLicense','')
+          this.$set(this.query,'consignmentStatus','')
+          this.init()
       }
   }
 }

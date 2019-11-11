@@ -10,7 +10,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="合同号" >
-            <el-input v-model="form.contractNo" style="width: 170px;"/>
+            <el-input v-model="form.contractNum" style="width: 170px;"/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -171,7 +171,7 @@ export default {
         startDate: null,
         endDate: null,
         createDate: null,
-        contractNo: '',
+        contractNum: '',
         contractTitle: '',
         contractName: '',
         contractText: '',
