@@ -30,7 +30,7 @@
       </el-row>
       <el-row >
          <el-col :span="6">
-           合同号:
+             <span class="label"> 合同号:</span>
             <el-input v-model="query.contNo" clearable placeholder="请输入合同号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
          </el-col>
         <el-col :span="6"  class="filter-item">
@@ -38,7 +38,7 @@
           <el-date-picker clearable style="width: 200px;" v-model="query.startDate"  type="date" placeholder="选择开始日期"></el-date-picker>
         </el-col>
         <el-col :span="6"  class="filter-item">
-          结束时间:
+          <span class="label" > 结束时间: </span>
           <el-date-picker style="width: 200px;" clearable v-model="query.endDate"  type="date" placeholder="选择截止日期" ></el-date-picker>
         </el-col>
       </el-row>

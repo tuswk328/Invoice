@@ -48,13 +48,13 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="生效日期" prop="startDate" label-width="120px">
-            <el-date-picker :disabled="isAdd" :picker-options="pickerOptions0" v-model="form.startDate" type="date" placeholder="选择日期" style="width: 170px;">
+            <el-date-picker :disabled="isAdd" :picker-options="pickerOptions0" value-format="yyyy-MM-dd"  v-model="form.startDate" type="date" placeholder="选择日期" style="width: 170px;">
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="失效日期" prop="endDate" label-width="120px">
-            <el-date-picker :disabled="isAdd" :picker-options="pickerOptions1" v-model="form.endDate" type="date" placeholder="选择日期" style="width: 170px;">
+            <el-date-picker :disabled="isAdd" :picker-options="pickerOptions1" value-format="yyyy-MM-dd" v-model="form.endDate" type="date" placeholder="选择日期" style="width: 170px;">
             </el-date-picker>
           </el-form-item>
         </el-col>
