@@ -4,15 +4,16 @@
     <div class="head-container demo-input-suffix">
       <el-row >
          <el-col :span="6" >
-           合同编号:
+           <span class="label">合同编号: </span>
             <el-input v-model="query.contractNo" clearable placeholder="请输入合同号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
          </el-col>
+         
          <el-col :span="6"  >
-           运输清单号:
+           <span class="label">运输清单号:</span>
             <el-input v-model="query.lotNo" clearable placeholder="请输入运输清单号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
          </el-col>
          <el-col :span="6" >
-            收货单位:
+          <span class="label">收货单位:</span>
           <el-select v-model="query.consigneeName" clearable filterable placeholder="请选择收货单位" style="width: 200px;">
               <el-option
                 v-for="item in consigneeName"
@@ -23,21 +24,21 @@
           </el-select>
          </el-col>
          <el-col :span="6"  class="filter-item">
-           车牌号:
+           <span class="label">车牌号:   </span>
            <el-input v-model="query.headLicense" clearable placeholder="请输入车牌号码" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery"/>
          </el-col>
       </el-row>
       <el-row >
           <el-col :span="6"  class="filter-item">
-            开始时间:
+             <span class="label">开始时间:  </span>
             <el-date-picker style="width: 200px;" clearable v-model="query.startDate" type="date" placeholder="选择开始日期"></el-date-picker>&nbsp;&nbsp;&nbsp;-
           </el-col>
           <el-col :span="6"  class="filter-item">
-            结束时间:
+            <span class="label"> 结束时间:  </span>
             <el-date-picker style="width: 200px;" clearable v-model="query.endDate" type="date" placeholder="选择截止日期" ></el-date-picker>
           </el-col>
          <el-col :span="6"  >
-           合同状态:
+             <span class="label">合同状态: </span>
            <el-select v-model="query.consignmentStatus"  clearable placeholder="请输入合同状态"  @keyup.enter.native="toQuery">
                <el-option
                  v-for="item in options"

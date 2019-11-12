@@ -2,18 +2,32 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container demo-input-suffix">
-      <el-row type="flex" class="row-bg" justify="space-around" >
-         <el-col >
-           申请单号:
+      <el-row>
+         <el-col :span="6" class="filter-item">
+            <span class="label">申请单号:</span>
             <el-input v-model="query.name" clearable placeholder="请输入合同号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
          </el-col>
-         <el-col >
-           合同号:
+         <el-col :span="6" class="filter-item">
+            <span class="label">合同号:</span>
             <el-input v-model="query.name" clearable placeholder="请输入收货单位" style="width: 200px;"  @keyup.enter.native="toQuery"/>
          </el-col>
-         <el-col >
+          <el-col :span="6" class="filter-item">
+            <span class="label">受票人:</span>
+           <el-select v-model="query.value"  filterable placeholder="请选择受票人">
+               <el-option
+                 v-for="item in options"
+                 :key="item.value"
+                 :label="item.label"
+                 :value="item.value">
+               </el-option>
+           </el-select>
+         </el-col>
+      </el-row>
+      <el-row>
+       
+          <!-- <el-col :span="6" class="filter-item">
            <div class="block" >
-             合同时间:
+              <span class="label"> 合同时间:</span>
              <el-date-picker
                v-model="query.name"
                type="daterange"
@@ -25,22 +39,17 @@
                :picker-options="pickerOptions" style="width: 300px;" >
              </el-date-picker>
           </div>
-         </el-col>
-      </el-row>
-      <el-row type="flex" class="row-bg" justify="space-around">
-         <el-col >
-           受票人:
-           <el-select v-model="query.value"  filterable placeholder="请选择受票人">
-               <el-option
-                 v-for="item in options"
-                 :key="item.value"
-                 :label="item.label"
-                 :value="item.value">
-               </el-option>
-           </el-select>
-         </el-col>
-         <el-col >
-           承运方:
+         </el-col> -->
+          <el-col :span="6"  class="filter-item">
+                <span class="label">开始时间:</span>
+                <el-date-picker clearable style="width: 200px;" v-model="query.startDate"  type="date" placeholder="选择开始日期"></el-date-picker>
+              </el-col>
+              <el-col :span="6"  class="filter-item">
+                <span class="label">结束时间:</span>
+                <el-date-picker style="width: 200px;" clearable v-model="query.endDate"  type="date" placeholder="选择截止日期" ></el-date-picker>
+              </el-col>
+         <el-col :span="6"  class="filter-item">
+            <span class="label">承运方:</span>
            <el-select v-model="query.status"  clearable placeholder="请输入承运方" @keyup.enter.native="toQuery" style="width: 200px;">
                <el-option
                  v-for="item in options1"
@@ -50,11 +59,22 @@
                </el-option>
            </el-select>
          </el-col>
-         <el-col >
-           <el-button   size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
-           <el-button   size="mini" type="success" icon="el-icon-search" @click="toQuery">重置</el-button>
+         <el-col  :offset="20">
+           <el-button   class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
+           <el-button   class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">重置</el-button>
          </el-col>
       </el-row>
+    </div>
+    <!-- 导出 -->
+    <div style="display: inline-block;">
+      <el-button
+        v-permission="['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EXPORT']"
+        :loading="downloadLoading"
+        size="mini"
+        class="filter-item"
+        type="warning"
+        icon="el-icon-download"
+        @click="download">导出</el-button>
     </div>
     <el-row :gutter="20">
     </el-row>
@@ -199,5 +219,9 @@ export default {
 </script>
 
 <style scoped>
-
+.label{
+  display: inline-block;
+  width: 80px;
+  text-align: right;
+}
 </style>
