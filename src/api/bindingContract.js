@@ -39,6 +39,16 @@ export function add(data) {
   })
 }
 
+export function findByDrawweAndConDate(data) {
+  return request({
+    url: 'api/findByDrawweAndConDate',
+    method: 'post',
+    data
+  })
+}
+
+
+
 export function del(id) {
   return request({
     url: 'api/bindingContract/' + id,
