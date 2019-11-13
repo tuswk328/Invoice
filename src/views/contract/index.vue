@@ -85,7 +85,8 @@
       </div>
     </div>
     <!--表格渲染-->
-    <el-table @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
+    <div  ref="tableRef" style="height:auto;">
+      <el-table :height="tableHeight" @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection"/>
       <el-table-column label="合同编号">
       <template  slot-scope="scope">
@@ -120,6 +121,7 @@
        </template>
       </el-table-column>
     </el-table>
+    </div>
     <!--分页组件-->
     <el-pagination
       :total="total"
@@ -147,6 +149,7 @@ export default {
   mixins: [initData,initDict],
   data() {
     return {
+      tableHeight:300,//表格高度
       contractList:[],//保存已勾选的合同集合
       drawweList:[],//受票人集合
       delLoading: false,
@@ -162,6 +165,11 @@ export default {
       this.getDictMap('carrier')
       this.getBindingContractByDrawwe()
     })
+  },
+  mounted(){
+    this.tableHeight = window.innerHeight-this.$refs.tableRef.offsetTop-60
+    console.log(window.innerHeight)
+    console.log(this.$refs.tableRef.offsetTop)
   },
   methods: {
     reset(){
