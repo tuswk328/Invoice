@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="dialog" :close-on-click-modal="false" :before-close="cancel" append-to-body width="700px">
-   <el-tabs v-model="activeName" @tab-click="handleClick">
+   <el-tabs v-model="activeName">
     <el-tab-pane name="first" label="审批信息管理">
       <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="660px">
         <el-divider content-position="left">审核信息</el-divider>
