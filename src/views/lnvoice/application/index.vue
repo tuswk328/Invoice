@@ -54,9 +54,9 @@
     <!--表格渲染-->
     <el-table @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection" />
-      <el-table-column label="申请单号" prop="lnvoiceOrder" width="85" align="center" />
-      <el-table-column prop="contNo" label="合同号" />
-      <el-table-column prop="contDate" label="合同日期">
+      <el-table-column label="申请单号" prop="lnvoiceOrder" width="150" align="center" />
+      <el-table-column prop="contNo" label="合同号" width="130"/>
+      <el-table-column prop="contDate" label="合同日期" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.contDate) }}</span>
         </template>
@@ -66,34 +66,34 @@
           <span>{{parseStatus(scope.row.lnvoiceStatus)}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="drawwe" label="受票人" />
-      <el-table-column prop="carrier" label="承运方" />
-      <el-table-column prop="lnvoiceMoney" label="开票金额">
+      <el-table-column prop="drawwe" label="受票人" width="100"/>
+      <el-table-column prop="carrier" label="承运方" width="100"/>
+      <el-table-column prop="lnvoiceMoney" label="开票金额" width="130">
         <template slot-scope="scope">
           <span>{{number_format(scope.row.lnvoiceMoney, 2)}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="creatorName" label="申请人" />
-      <el-table-column prop="creatDate" label="申请时间">
+      <el-table-column prop="creatDate" label="申请时间" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.creatDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="operationName" label="运营审核人" />
-      <el-table-column prop="operationDate" label="运营审核时间">
+      <el-table-column prop="operationDate" label="运营审核时间" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.operationDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="operationComments" label="运营审核意见" />
-      <el-table-column prop="financialName" label="财务审核人" />
-      <el-table-column prop="financialDate" label="财务审核时间">
+      <el-table-column prop="operationComments" label="运营审核意见" width="110"/>
+      <el-table-column prop="financialName" label="财务审核人" width="100"/>
+      <el-table-column prop="financialDate" label="财务审核时间" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.financialDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="financialComments" label="财务审核意见" />
-      <el-table-column prop="invoiceNumber" label="发票号码" width="100" />
+      <el-table-column prop="financialComments" label="财务审核意见" width="110"/>
+      <el-table-column prop="invoiceNumber" label="发票号码" width="110" />
     </el-table>
     <!--分页组件-->
     <el-pagination :total="total" :current-page="page + 1" style="margin-top: 8px;" layout="total, prev, pager, next, sizes"
