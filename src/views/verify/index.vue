@@ -54,17 +54,6 @@
           <el-button slot="reference" type="danger"  @click="definite(scope.row)" size="mini">申请明细</el-button>
        </template>
       </el-table-column>
-      <el-table-column label="申请单号" prop="lnvoiceOrder" width="85" align="center" />
-      <el-table-column prop="contNo" label="合同号" />
-      <el-table-column prop="contDate" label="合同日期">
-    <el-table v-loading="loading" :data="data" size="small" style="width: 100%;">
-          <el-table-column width="55" type="selection"/>
-      <el-table-column label="操作" width="225" align="center">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.contDate) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="status" label="申请单状态">
       <el-table-column  prop="status" label="申清单号" width="150"/>
       <el-table-column  prop="status" label="合同号" width="150"/>
       <el-table-column prop="createTime" label="合同日期" width="100">
@@ -79,8 +68,6 @@
           <span>{{number_format(scope.row.lnvoiceMoney, 2)}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="creatorName" label="申请人" />
-      <el-table-column prop="creatDate" label="申请时间">
       <el-table-column  prop="status" label="申请单状态">
           <template slot-scope="scope">
             <span>{{scope.row.status==1?'启用':'作废'}}</span>
@@ -100,18 +87,16 @@
         </template>
       </el-table-column>
       <el-table-column prop="operationName" label="运营审核人" />
-      <el-table-column prop="operationDate" label="运营审核时间">
       <el-table-column  prop="engine" label="运营审核人" width="100"/>
-      <el-table-column prop="createTime" label="运营审核时间" width="150">
+      <el-table-column prop="operationDate" label="运营审核时间" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.operationDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="operationComments" label="运营审核意见" />
       <el-table-column prop="financialName" label="财务审核人" />
-      <el-table-column prop="financialDate" label="财务审核时间">
       <el-table-column  prop="engine" label="财务审核人" width="100"/>
-      <el-table-column prop="createTime" label="财务审核时间" width="100">
+      <el-table-column prop="financialDate" label="财务审核时间" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.financialDate) }}</span>
         </template>
