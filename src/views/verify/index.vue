@@ -4,6 +4,7 @@
     <eForm ref="form"/>
     <applicationForm ref="applicationForm"/>
     <!--工具栏-->
+    
     <div class="head-container demo-input-suffix">
            申请单号:
             <el-input v-model="query.name" clearable placeholder="请输入申请单号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
@@ -35,15 +36,16 @@
     </div>
     <!--表格渲染-->
     <el-table v-loading="loading" :data="data" size="small" style="width: 100%;">
+          <el-table-column width="55" type="selection"/>
       <el-table-column label="操作" width="225" align="center">
         <template slot-scope="scope">
           <el-button  size="mini" type="primary" @click="verifyInfo(scope.row)">审核详情</el-button>
            <el-button slot="reference" type="danger"  @click="definite(scope.row)" size="mini">申请明细</el-button>
         </template>
       </el-table-column>
-      <el-table-column  prop="status" label="申清单号"/>
-      <el-table-column  prop="status" label="合同号"/>
-      <el-table-column prop="createTime" label="合同日期">
+      <el-table-column  prop="status" label="申清单号" width="150"/>
+      <el-table-column  prop="status" label="合同号" width="150"/>
+      <el-table-column prop="createTime" label="合同日期" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
@@ -54,32 +56,32 @@
           </template>
       </el-table-column>
       <el-table-column  prop="engine" label="受票人"/>
-      <el-table-column  prop="coding" label="承运方"/>
+      <el-table-column  prop="coding" label="承运方" width="100"/>
       <el-table-column  prop="status" label="开票金额">
           <template slot-scope="scope">
             <span>{{number_format(scope.row.status, 2)}}</span>
           </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="申请人"/>
-      <el-table-column prop="createTime" label="申请时间">
+      <el-table-column prop="createTime" label="申请人" width="150"/>
+      <el-table-column prop="createTime" label="申请时间" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column  prop="engine" label="运营审核人"/>
-      <el-table-column prop="createTime" label="运营审核时间">
+      <el-table-column  prop="engine" label="运营审核人" width="100"/>
+      <el-table-column prop="createTime" label="运营审核时间" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column  prop="engine" label="财务审核人"/>
-      <el-table-column prop="createTime" label="财务审核时间">
+      <el-table-column  prop="engine" label="财务审核人" width="100"/>
+      <el-table-column prop="createTime" label="财务审核时间" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column  prop="engine" label="财务审核意见"/>
-      <el-table-column  prop="engine" label="发票号码"/>
+      <el-table-column  prop="engine" label="财务审核意见" width="100"/>
+      <el-table-column  prop="engine" label="发票号码" width="150"/>
     </el-table>
     <!--分页组件-->
     <el-pagination
