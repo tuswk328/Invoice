@@ -20,6 +20,46 @@ export function parseTime(time) {
     return ''
   }
 }
+export function parseStatus(status) {
+  if (status) {
+    switch (status){
+      case 1:
+      status='已提交'
+        break;
+      case 2:
+      status='运营已审'
+        break;
+      case 3:
+      status='财务已审'
+        break;
+      case 4:
+      status='已开票'
+        break;
+      case 5:
+      status='已驳回'
+        break;
+      case 6:
+      status='已作废'
+        break;
+      case 7:
+      status='驳回开票'
+        break;
+      case 8:
+      status='作废开票'
+        break;
+      case 9:
+      status='待撤回'
+        break;
+      case 10:
+      status='已撤回'
+        break;
+      default:
+       status='未知'
+        break;
+    }
+    return status;
+}
+}
 export function number_format(number, decimals, dec_point, thousands_sep) {
 　　/*
 　　 * 参数说明：

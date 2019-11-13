@@ -45,7 +45,7 @@
       <el-row :gutter="20">
         <el-col  :offset="20">
           <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
-          <el-button  class="filter-item" size="mini" type="primary" icon="el-icon-refresh-left" @click="reset('ruleForm')">重置</el-button>
+          <el-button  class="filter-item" size="mini" type="primary" icon="el-icon-refresh-left" @click="reset">重置</el-button>
         </el-col>
       </el-row>
       <!-- 审核 -->

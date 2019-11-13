@@ -66,6 +66,7 @@ export default {
     cancel() {
       this.resetForm()
     },
+    //开票申请新增
     doSubmit() {
       this.$refs['form'].validate((valid) => {
         if (valid) {

@@ -5,26 +5,26 @@
       <el-row>
          <el-col :span="6" class="filter-item">
             <span class="label">申请单号:</span>
-            <el-input v-model="query.name" clearable placeholder="请输入合同号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
+            <el-input v-model="query.lnvoiceOrder" clearable placeholder="请输入申请单号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
          </el-col>
          <el-col :span="6" class="filter-item">
             <span class="label">合同号:</span>
-            <el-input v-model="query.name" clearable placeholder="请输入收货单位" style="width: 200px;"  @keyup.enter.native="toQuery"/>
+            <el-input v-model="query.contNo" clearable placeholder="请输入收货单位" style="width: 200px;"  @keyup.enter.native="toQuery"/>
          </el-col>
           <el-col :span="6" class="filter-item">
             <span class="label">受票人:</span>
-           <el-select v-model="query.value"  filterable placeholder="请选择受票人">
-               <el-option
-                 v-for="item in options"
-                 :key="item.value"
-                 :label="item.label"
-                 :value="item.value">
-               </el-option>
-           </el-select>
+            <el-select v-model="query.drawwe" clearable filterable placeholder="请选择受票人" style="width: 200px;" @keyup.enter.native="toQuery">
+                <el-option
+                  v-for="item in drawweList"
+                  :key="item.id"
+                  :label="item.drawwe"
+                  :value="item.drawwe">
+                </el-option>
+            </el-select>
          </el-col>
       </el-row>
       <el-row>
-       
+
           <!-- <el-col :span="6" class="filter-item">
            <div class="block" >
               <span class="label"> 合同时间:</span>
@@ -50,18 +50,18 @@
               </el-col>
          <el-col :span="6"  class="filter-item">
             <span class="label">承运方:</span>
-           <el-select v-model="query.status"  clearable placeholder="请输入承运方" @keyup.enter.native="toQuery" style="width: 200px;">
-               <el-option
-                 v-for="item in options1"
-                 :key="item.value"
-                 :label="item.label"
-                 :value="item.value" >
-               </el-option>
-           </el-select>
+             <el-select filterable  v-model="query.carrier"  clearable placeholder="请输入承运方"  @keyup.enter.native="toQuery" style="width: 200px;">
+                 <el-option
+                   v-for="item in dictMap.carrier"
+                   :key="item.value"
+                   :label="item.label"
+                   :value="item.id" >
+                 </el-option>
+             </el-select>
          </el-col>
          <el-col  :offset="20">
            <el-button   class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
-           <el-button   class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">重置</el-button>
+           <el-button   class="filter-item" size="mini" type="success" icon="el-icon-search"  @click="reset">重置</el-button>
          </el-col>
       </el-row>
     </div>
@@ -79,46 +79,48 @@
     <el-row :gutter="20">
     </el-row>
     <!--表格渲染-->
-    <el-table v-loading="loading" :data="data" size="small" style="width: 100%;">
-      <el-table-column label="申请单号" prop="status" width="85" align="center"/>
-      <el-table-column  prop="status" label="合同号"/>
-      <el-table-column prop="createTime" label="合同日期">
+    <el-table @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
+       <el-table-column width="55" type="selection"/>
+      <el-table-column label="申请单号" prop="lnvoiceOrder" width="85" align="center"/>
+      <el-table-column  prop="contNo" label="合同号"/>
+      <el-table-column prop="contDate" label="合同日期">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTime(scope.row.contDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column  prop="status" label="申请单状态">
           <template slot-scope="scope">
-            <span>{{scope.row.status==1?'启用':'作废'}}</span>
+            <span>{{parseStatus(scope.row.lnvoiceStatus)}}</span>
           </template>
       </el-table-column>
-      <el-table-column  prop="engine" label="受票人"/>
-      <el-table-column  prop="coding" label="承运方"/>
-      <el-table-column  prop="status" label="开票金额">
+      <el-table-column  prop="drawwe" label="受票人"/>
+      <el-table-column  prop="carrier" label="承运方"/>
+      <el-table-column  prop="lnvoiceMoney" label="开票金额">
           <template slot-scope="scope">
-            <span>{{number_format(scope.row.status, 2)}}</span>
+            <span>{{number_format(scope.row.lnvoiceMoney, 2)}}</span>
           </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="申请人"/>
-      <el-table-column prop="createTime" label="申请时间">
+      <el-table-column prop="creatorName" label="申请人"/>
+      <el-table-column prop="creatDate" label="申请时间">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTime(scope.row.creatDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column  prop="engine" label="运营审核人"/>
-      <el-table-column prop="createTime" label="运营审核时间">
+      <el-table-column  prop="operationName" label="运营审核人"/>
+      <el-table-column prop="operationDate" label="运营审核时间">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTime(scope.row.operationDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column  prop="engine" label="财务审核人"/>
-      <el-table-column prop="createTime" label="财务审核时间">
+      <el-table-column  prop="operationComments" label="运营审核意见"/>
+      <el-table-column  prop="financialName" label="财务审核人"/>
+      <el-table-column prop="financialDate" label="财务审核时间">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTime(scope.row.financialDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column  prop="engine" label="财务审核意见"/>
-      <el-table-column  prop="engine" label="发票号码"/>
+      <el-table-column  prop="financialComments" label="财务审核意见"/>
+      <el-table-column  prop="invoiceNumber" label="发票号码" width="100"/>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -133,72 +135,49 @@
 
 <script>
 import initData from '@/mixins/initData'
-import { parseTime,number_format } from '@/utils/index'
+import initDict from '@/mixins/initDict'
+import { parseTime,number_format,parseStatus } from '@/utils/index'
+import { getBindingContractByDrawwe } from '@/api/bindingContract.js'
+
 export default {
-  mixins: [initData],
+  mixins: [initData,initDict],
   data() {
     return {
-       pickerOptions: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近三个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-            picker.$emit('pick', [start, end]);
-          }
-        }]
-      },
-      value2: [],
-      options: [{
-        value: '1',
-        label: '受票人1'
-      }, {
-        value: '2',
-        label: '受票人2'
-      }],
-      options1: [{
-        value: '1',
-        label: '承运方1'
-      }, {
-        value: '2',
-        label: '承运方2'
-      }],
-      value: ''
+      drawweList:[],//受票人集合
+      vertifys:[],//保存选中的那个id
+      multipleSelection: [],
+
     }
   },
   created() {
     this.$nextTick(() => {
       this.init()
+      this.getDictMap('carrier')
+      this.getBindingContractByDrawwe()//查询收货单位
     })
   },
   mounted() {
       },
   methods: {
+    parseStatus,
     number_format,
     parseTime,
     beforeInit() {
-      this.url = 'api/generator/tables'
+      this.url = 'api/findByLnvoiceOrder'
       const query = this.query
-      const name = query.name
+      const lnvoiceOrder = query.lnvoiceOrder
+      const carrier = query.carrier
+      const drawwe = query.drawwe
+      const contNo = query.contNo
+      const startDate = query.startDate
+      const endDate = query.endDate
       this.params = { page: this.page, size: this.size }
-      if (name) { this.params['name'] = name }
+      if (lnvoiceOrder) { this.params['lnvoiceOrder'] = lnvoiceOrder }
+      if (drawwe) { this.params['drawwe'] = drawwe }
+      if (carrier) { this.params['carrier'] = carrier }
+      if (contNo) { this.params['contNo'] = contNo }
+      if (startDate) { this.params['startDate'] = parseTime(startDate) }
+      if (endDate) { this.params['endDate'] = parseTime(endDate) }
       return true
     },
     cancel() {
@@ -214,6 +193,14 @@ export default {
         }
       })
     },
+    //查询受票人
+     getBindingContractByDrawwe(){
+         getBindingContractByDrawwe().then(res => {
+           this.drawweList=res
+         }).catch(err => {
+    
+         })
+     },
   }
 }
 </script>
