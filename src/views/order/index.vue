@@ -185,7 +185,7 @@ export default {
       }else{
         this.downloadLoading = true
         import('@/utils/export2Excel').then(excel => {
-          const tHeader = ['合同编号', '合同状态','合同时间' '运输清单号', '托运单号', '托运单状态', '运单创建日期', '下单时间', '发货单位', '收货单位','货物名称','件数','起站','到站','车辆信息','司机信息','发车时间','投保结果','失败原因','确认金额','投保金额']
+          const tHeader = ['合同编号', '合同状态','合同时间', '运输清单号', '托运单号', '托运单状态', '运单创建日期', '下单时间', '发货单位', '收货单位','货物名称','件数','起站','到站','车辆信息','司机信息','发车时间','投保结果','失败原因','确认金额','投保金额']
          const filterVal= ['contractNo','contractStatus','contractDate', 'lotNo', 'systemOrderId','consignmentStatus', 'createDate', 'orderDate', 'shipperName', 'consigneeName','cargoName','cargoCount','departStation','arriveStation','headLicense','driverName','departDate','insureResult','insureReasons','insureMoney','confirmationAmount']
           const data = this.formatJson(filterVal, this.orderList)
           excel.export_json_to_excel({
