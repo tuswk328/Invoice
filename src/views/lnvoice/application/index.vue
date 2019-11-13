@@ -102,17 +102,10 @@
 </template>
 
 <script>
-  import initData from '@/mixins/initData'
-  import initDict from '@/mixins/initDict'
-  import {
-    parseTime,
-    number_format,
-    parseStatus
-  } from '@/utils/index'
-  import {
-    getBindingContractByDrawwe
-  } from '@/api/bindingContract.js'
-
+import initData from '@/mixins/initData'
+import initDict from '@/mixins/initDict'
+import {parseTime,number_format,parseStatus} from '@/utils/index'
+import {getBindingContractByDrawwe} from '@/api/bindingContract.js'
   export default {
     mixins: [initData, initDict],
     data() {
@@ -127,7 +120,7 @@
       this.$nextTick(() => {
         this.init()
         this.getDictMap('carrier')
-        this.getBindingContractByDrawwe() //查询收货单位
+        this.getBindingContractByDrawwe() //查询受票人
       })
     },
     mounted() {},
@@ -219,7 +212,11 @@
         return jsonData.map(v => filterVal.map(j => {
           if (j === 'contDate' || j === 'operationDate' || j === 'creatDate' || j === 'financialDate') {
             return parseTime(v[j])
-          } else {
+          }
+          else if(j === 'lnvoiceStatus'){
+            return parseStatus(v[j])
+          }
+           else {
             return v[j]
           }
         }))
