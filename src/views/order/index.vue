@@ -70,30 +70,30 @@
     <!--表格渲染-->
     <el-table @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection"/>
-      <el-table-column label="合同号" prop="contractNo" />
+      <el-table-column label="合同号" prop="contractNo" width="100" />
       <el-table-column  prop="contractStatus" label="合同状态"/>
-      <el-table-column  prop="lotNo" label="运输清单号"/>
-      <el-table-column  prop="systemOrderId" label="托运单号"/>
-      <el-table-column  prop="consignmentStatus" label="托运单状态"/>
-      <el-table-column prop="createDate" label="运单创建日期">
+      <el-table-column  prop="lotNo" label="运输清单号" width="150"/>
+      <el-table-column  prop="systemOrderId" label="托运单号" width="150"/>
+      <el-table-column  prop="consignmentStatus" label="托运单状态" width="100"/>
+      <el-table-column prop="createDate" label="运单创建日期" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="orderDate" label="下单时间">
+      <el-table-column prop="orderDate" label="下单时间" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.orderDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column  prop="shipperName" label="发货单位"/>
-      <el-table-column  prop="consigneeName" label="收货单位"/>
-      <el-table-column  prop="cargoName" label="货物名称"/>
+      <el-table-column  prop="shipperName" label="发货单位" width="150"/>
+      <el-table-column  prop="consigneeName" label="收货单位" width="150"/>
+      <el-table-column  prop="cargoName" label="货物名称"  width="100"/>
       <el-table-column  prop="cargoCount" label="件数"/>
-      <el-table-column  prop="departStation" label="起站"/>
-      <el-table-column  prop="arriveStation" label="到站"/>
-      <el-table-column  prop="headLicense" label="车辆信息"/>
-      <el-table-column  prop="driverName" label="司机信息"/>
-      <el-table-column prop="departDate" label="发车时间">
+      <el-table-column  prop="departStation" label="起站" width="100"/>
+      <el-table-column  prop="arriveStation" label="到站" width="100"/>
+      <el-table-column  prop="headLicense" label="车辆信息" width="100"/>
+      <el-table-column  prop="driverName" label="司机信息" width="100"/>
+      <el-table-column prop="departDate" label="发车时间" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.departDate) }}</span>
         </template>
