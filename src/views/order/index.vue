@@ -7,7 +7,7 @@
            <span class="label">合同编号: </span>
             <el-input v-model="query.contractNo" clearable placeholder="请输入合同号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
          </el-col>
-         
+
          <el-col :span="6"  >
            <span class="label">运输清单号:</span>
             <el-input v-model="query.lotNo" clearable placeholder="请输入运输清单号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
@@ -72,6 +72,11 @@
       <el-table-column width="55" type="selection"/>
       <el-table-column label="合同号" prop="contractNo" width="100" />
       <el-table-column  prop="contractStatus" label="合同状态"/>
+      <el-table-column prop="contDate" label="合同时间" width="100">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.contDate) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column  prop="lotNo" label="运输清单号" width="150"/>
       <el-table-column  prop="systemOrderId" label="托运单号" width="150"/>
       <el-table-column  prop="consignmentStatus" label="托运单状态" width="100"/>
