@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!--form 组件-->
-    <!-- <eForm ref="form"/> -->
+     <eForm ref="form"/>
     <applicationForm ref="applicationForm"/>
     <!--工具栏-->
 
@@ -54,57 +54,46 @@
           <el-button slot="reference" type="danger"  @click="definite(scope.row)" size="mini">申请明细</el-button>
        </template>
       </el-table-column>
-      <el-table-column  prop="status" label="申清单号" width="150"/>
-      <el-table-column  prop="status" label="合同号" width="150"/>
-      <el-table-column prop="createTime" label="合同日期" width="100">
+      <el-table-column  prop="lnvoiceOrder" label="申清单号" width="150"/>
+      <el-table-column  prop="contNo" label="合同号" width="150"/>
+      <el-table-column prop="contDate" label="合同日期" width="150">
         <template slot-scope="scope">
-          <span>{{parseStatus(scope.row.lnvoiceStatus)}}</span>
+          <span>{{ parseTime(scope.row.contDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="drawwe" label="受票人" />
-      <el-table-column prop="carrier" label="承运方" />
-      <el-table-column prop="lnvoiceMoney" label="开票金额">
-        <template slot-scope="scope">
-          <span>{{number_format(scope.row.lnvoiceMoney, 2)}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column  prop="status" label="申请单状态">
+      <el-table-column  prop="lnvoiceStatus" label="申请单状态">
           <template slot-scope="scope">
-            <span>{{scope.row.status==1?'启用':'作废'}}</span>
+            <span>{{parseStatus(scope.row.lnvoiceStatus)}}</span>
           </template>
       </el-table-column>
-      <el-table-column  prop="engine" label="受票人"/>
-      <el-table-column  prop="coding" label="承运方" width="100"/>
-      <el-table-column  prop="status" label="开票金额">
+      <el-table-column  prop="drawwe" label="受票人"  width="100"/>
+      <el-table-column  prop="carrier" label="承运方" width="100"/>
+      <el-table-column  prop="lnvoiceMoney" label="开票金额"  width="100">
           <template slot-scope="scope">
-            <span>{{number_format(scope.row.status, 2)}}</span>
+            <span>{{number_format(scope.row.lnvoiceMoney, 2)}}</span>
           </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="申请人" width="150"/>
-      <el-table-column prop="createTime" label="申请时间" width="150">
+      <el-table-column prop="creatorName" label="申请人" width="150"/>
+      <el-table-column prop="creatDate" label="申请时间" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.creatDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="operationName" label="运营审核人" />
-      <el-table-column  prop="engine" label="运营审核人" width="100"/>
+      <el-table-column  prop="operationName" label="运营审核人" width="100"/>
       <el-table-column prop="operationDate" label="运营审核时间" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.operationDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="operationComments" label="运营审核意见" />
-      <el-table-column prop="financialName" label="财务审核人" />
-      <el-table-column  prop="engine" label="财务审核人" width="100"/>
+      <el-table-column prop="operationComments" label="运营审核意见" width="100"/>
+      <el-table-column  prop="financialName" label="财务审核人" width="100"/>
       <el-table-column prop="financialDate" label="财务审核时间" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.financialDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="financialComments" label="财务审核意见" />
-      <el-table-column prop="invoiceNumber" label="发票号码" width="100" />
-      <el-table-column  prop="engine" label="财务审核意见" width="100"/>
-      <el-table-column  prop="engine" label="发票号码" width="150"/>
+      <el-table-column  prop="financialComments" label="财务审核意见" width="100"/>
+      <el-table-column  prop="invoiceNumber" label="发票号码" width="150"/>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -122,7 +111,8 @@ import initData from '@/mixins/initData'
 import { parseTime,number_format,parseStatus } from '@/utils/index'
 import eForm from './form'
 import applicationForm from './applicationForm'
-import {getBindingContractByDrawwe} from '@/api/bindingContract.js'
+import {getBindingContractByDrawwe} from '@/api/bindingContract'
+import {findByAuditLog,findByLnvoiceInfo} from '@/api/verify'
 
 
 export default {
@@ -245,8 +235,18 @@ export default {
     //审核详情
     verifyInfo(data){
        const _this = this.$refs.form
-
        _this.dialog = true
+       _this.lnvoiceId=data.id
+       _this.init()
+       findByLnvoiceInfo(data.id).then(res => {
+        if(res!=''){
+          _this.form = res
+          _this.form.lnvoiceStatus=parseStatus(res.lnvoiceStatus)
+        }
+       }).catch(err => {
+          console.log(err)
+       })
+
     },
     //申请明细
     definite(data){
