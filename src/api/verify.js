@@ -15,3 +15,10 @@ export function findByLnvoiceInfo(id) {
     id
   })
 }
+export function operationVerify(data,newLnvoiceStatus) {
+  return request({
+    url: 'api/updateByOperation/'+newLnvoiceStatus,
+    method: 'post',
+    data,newLnvoiceStatus
+  })
+}

@@ -16,8 +16,8 @@
 		   <span class="label">申请单状态:</span>
        <el-select v-model="query.lnvoiceStatus" clearable filterable placeholder="请选择申请单状态" style="width: 200px;"
         @keyup.enter.native="toQuery">
-       <el-option v-for="item in lnvoiceStatusList" :key="item.id" :label="item.label" :value="item.value">
-       </el-option>
+         <el-option v-for="item in lnvoiceStatusList" :key="item.id" :label="item.label" :value="item.value">
+         </el-option>
        </el-select>
 		 </el-col>
 		 <el-col :span="6" class="filter-item">
@@ -37,7 +37,6 @@
     </div>
     <div style="display: inline-block;">
       <el-button
-        v-permission="['ADMIN','USER_ALL','USER_SELECT']"
         :loading="downloadLoading"
         size="mini"
         class="filter-item"
@@ -49,10 +48,10 @@
     <el-table @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection" />
        <el-table-column label="操作" width="200" align="center" >
-       <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="verifyInfo(scope.row)">审核详情</el-button>
-          <el-button slot="reference" type="danger"  @click="definite(scope.row)" size="mini">申请明细</el-button>
-       </template>
+       <template slot-scope="scope">
+          <el-button size="mini" type="primary" @click="verifyInfo(scope.row)">审核详情</el-button>
+          <el-button slot="reference" type="danger"  @click="definite(scope.row)" size="mini">申请明细</el-button>
+       </template>
       </el-table-column>
       <el-table-column  prop="lnvoiceOrder" label="申清单号" width="150"/>
       <el-table-column  prop="contNo" label="合同号" width="150"/>
@@ -93,7 +92,7 @@
         </template>
       </el-table-column>
       <el-table-column  prop="financialComments" label="财务审核意见" width="100"/>
-      <el-table-column  prop="invoiceNumber" label="发票号码" width="150"/>
+      <el-table-column  prop="lnvoiceNumber" label="发票号码" width="150"/>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -113,6 +112,7 @@ import eForm from './form'
 import applicationForm from './applicationForm'
 import {getBindingContractByDrawwe} from '@/api/bindingContract'
 import {findByAuditLog,findByLnvoiceInfo} from '@/api/verify'
+import {lnvoiceCommonList} from '@/utils/common'
 
 
 export default {
@@ -120,18 +120,7 @@ export default {
   components: { eForm,applicationForm },
   data() {
     return {
-      lnvoiceStatusList:[ //申请单状态集合
-        {value:1,label:'已申请'},
-        {value:2,label:'运营已审'},
-        {value:3,label:'财务已审'},
-        {value:4,label:'已开票'},
-        {value:5,label:'已驳回'},
-        {value:6,label:'已作废'},
-        {value:7,label:'驳回开票'},
-        {value:8,label:'作废开票'},
-        {value:9,label:'待撤回'},
-        {value:10,label:'已撤回'},
-      ],
+      lnvoiceStatusList:lnvoiceCommonList,
       downloadLoading:false,
       drawweList: [], //受票人集合
       lvnoiceOrderList: [], //保存开票订单集合
@@ -197,7 +186,7 @@ export default {
           const filterVal = ['lnvoiceOrder', 'contNo', 'contDate', 'lnvoiceStatus', 'drawwe',
             'carrier', 'lnvoiceMoney', 'creatorName', 'creatDate',
             'operationName', 'operationDate', 'operationComments', 'financialName',
-            'financialDate', 'financialComments', 'invoiceNumber'
+            'financialDate', 'financialComments', 'lnvoiceNumber'
           ]
           const data = this.formatJson(filterVal, this.lvnoiceOrderList)
           excel.export_json_to_excel({
@@ -241,7 +230,6 @@ export default {
        findByLnvoiceInfo(data.id).then(res => {
         if(res!=''){
           _this.form = res
-          _this.form.lnvoiceStatus=parseStatus(res.lnvoiceStatus)
         }
        }).catch(err => {
           console.log(err)
@@ -255,7 +243,6 @@ export default {
         _this.init()
         _this.dialog = true
       },
-
   }
 }
 </script>

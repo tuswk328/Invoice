@@ -7,7 +7,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="发票号码" label-width="100px" >
-                 <el-input disabled v-model="form.invoiceNumber"  />
+                 <el-input disabled v-model="form.lnvoiceNumber"  />
               </el-form-item>
             </el-col>
           </el-row>
@@ -52,7 +52,10 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="申请单状态" label-width="100px" >
-                <el-input disabled v-model="form.lnvoiceStatus" style="width: 150px;" />
+               <el-select disabled v-model="form.lnvoiceStatus"  style="width: 200px;">
+                 <el-option  v-for="item in lnvoiceStatusList" :key="item.id" :label="item.label" :value="item.value">
+                 </el-option>
+               </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -91,6 +94,7 @@
 <script>
 import initData from '@/mixins/initData'
 import { parseTime,number_format,parseStatus } from '@/utils/index'
+import {lnvoiceCommonList} from '@/utils/common'
 export default {
   mixins: [initData],
   props: {
@@ -103,6 +107,7 @@ export default {
       dialog: false,
       form: {
       },
+      lnvoiceStatusList:lnvoiceCommonList//保存申请单状态集合
     }
   },
   mounted() {

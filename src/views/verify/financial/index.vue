@@ -39,7 +39,7 @@
         size="mini"
         class="filter-item"
         type="primary"
-        @click="invoice">开票</el-button>
+        @click="lnvoice">开票</el-button>
     </div>
     <div style="display: inline-block;">
       <el-button
@@ -307,7 +307,7 @@ export default {
         }
     },
     //开票
-    invoice(){
+    lnvoice(){
 
     },
     //撤销

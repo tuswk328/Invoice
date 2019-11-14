@@ -93,7 +93,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="financialComments" label="财务审核意见" width="110"/>
-      <el-table-column prop="invoiceNumber" label="发票号码" width="110" />
+      <el-table-column prop="lnvoiceNumber" label="发票号码" width="110" />
     </el-table>
     <!--分页组件-->
     <el-pagination :total="total" :current-page="page + 1" style="margin-top: 8px;" layout="total, prev, pager, next, sizes"
@@ -195,7 +195,7 @@ import {getBindingContractByDrawwe} from '@/api/bindingContract.js'
             const filterVal = ['lnvoiceOrder', 'contNo', 'contDate', 'lnvoiceStatus', 'drawwe',
               'carrier', 'lnvoiceMoney', 'creatorName', 'creatDate',
               'operationName', 'operationDate', 'operationComments', 'financialName',
-              'financialDate', 'financialComments', 'invoiceNumber'
+              'financialDate', 'financialComments', 'lnvoiceNumber'
             ]
             const data = this.formatJson(filterVal, this.lvnoiceOrderList)
             excel.export_json_to_excel({

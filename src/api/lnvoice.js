@@ -15,9 +15,9 @@ export function findBySaveLnvoice(id) {
   })
 }
 
-export function saveInvoiceOrder(contractId,bindingContractId,lnvoiceMoney) {
+export function savelnvoiceOrder(contractId,bindingContractId,lnvoiceMoney) {
   return request({
-    url: 'api/saveInvoiceOrder?contractId='+contractId+'&bindingContractId='+bindingContractId+'&lnvoiceMoney='+lnvoiceMoney,
+    url: 'api/savelnvoiceOrder?contractId='+contractId+'&bindingContractId='+bindingContractId+'&lnvoiceMoney='+lnvoiceMoney,
     method: 'get',
     contractId,bindingContractId,lnvoiceMoney
   })

@@ -32,7 +32,7 @@
 </template>
 
 <script>
-  import {saveInvoiceOrder} from '@/api/lnvoice'
+  import {savelnvoiceOrder} from '@/api/lnvoice'
 export default {
   props: {
   },
@@ -70,7 +70,7 @@ export default {
     doSubmit() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          saveInvoiceOrder(this.form.contractId,this.form.bindingContractId,this.form.lnvoiceMoney).then(res => {
+          savelnvoiceOrder(this.form.contractId,this.form.bindingContractId,this.form.lnvoiceMoney).then(res => {
             this.resetForm()
             this.$notify({
               title: '开票成功',
