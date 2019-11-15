@@ -22,3 +22,26 @@ export function operationVerify(data,newLnvoiceStatus) {
     data,newLnvoiceStatus
   })
 }
+export function financialVerify(data,newLnvoiceStatus) {
+  return request({
+    url: 'api/updateByFinancial/'+newLnvoiceStatus,
+    method: 'post',
+    data,newLnvoiceStatus
+  })
+}
+
+export function financialByLnvoice(data) {
+  return request({
+    url: 'api/updateByFinancialByLnvoice',
+    method: 'post',
+    data
+  })
+}
+
+export function financialByRevoke(data) {
+  return request({
+    url: 'api/updateByFinancialByRevoke',
+    method: 'post',
+    data
+  })
+}

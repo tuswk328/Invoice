@@ -4,7 +4,7 @@
       <el-tab-pane name="first" label="审批信息管理">
         <el-form ref="form" :rules="rules" :model="form" size="small" label-width="660px">
           <el-divider content-position="left">审核信息</el-divider>
-          <el-row>
+          <el-row v-if="isverify">
             <el-col :span="24">
               <el-form-item label="发票号码" label-width="100px">
                 <el-input v-model="form.lnvoiceNumber" />
@@ -26,14 +26,14 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="12">
+            <el-col >
               <el-form-item label="受票人税号" label-width="100px">
-                <el-input disabled v-model="form.identificationNumber" style="width: 150px;" />
+                <el-input disabled v-model="form.identificationNumber" />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col  v-if="isverify">
               <el-form-item label="税率" label-width="100px">
-                <el-input disabled v-model="form.taxRate" style="width: 150px;" />
+                <el-input  v-model="form.taxRate"  />
               </el-form-item>
             </el-col>
           </el-row>
@@ -64,7 +64,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row v-if="!isverify">
             <el-col :span="12">
               <el-form-item label="审核" label-width="100px" prop="newlnvoiceStatus">
                 <el-select v-model="form.newlnvoiceStatus" clearable filterable placeholder="请选择申请单状态" style="width: 200px;">
@@ -74,10 +74,10 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row v-if="!isverify">
             <el-col :span="24">
-              <el-form-item label="审核意见" label-width="100px" prop="operationComments">
-                <el-input type="textarea" v-model="form.operationComments" />
+              <el-form-item label="审核意见" label-width="100px" prop="financialComments">
+                <el-input type="textarea" v-model="form.financialComments" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -111,7 +111,7 @@
   import initData from '@/mixins/initData'
   import store from '@/store'
   import {
-    operationVerify
+    financialVerify,financialByLnvoice
   } from '@/api/verify'
   import {
     parseTime,
@@ -124,22 +124,27 @@
 
   export default {
     mixins: [initData],
-    props: {},
+    props: {
+      isverify: {
+        type: Boolean,
+        required: true
+      },
+    },
     data() {
       return {
         lnvoiceStatusList: [ //申请单状态集合
           {
-            value: 2,
+            value: 3,
             label: '通过'
-          }, //运营已审
+          }, //财务已审
           {
-            value: 5,
+            value: 7,
             label: '驳回'
-          }, //已驳回
+          }, //驳回开票
           {
-            value: 6,
+            value: 8,
             label: '作废'
-          }, //已作废
+          }, //作废开票
         ],
         lnvoiceCommonList: lnvoiceCommonList, //保存申请单状态集合
         lnvoiceId: '', //用于保存父组件传过来的申请单id
@@ -153,7 +158,7 @@
             message: '请选择审核结果',
             trigger: 'change'
           }],
-          operationComments: [{
+          financialComments: [{
             required: true,
             message: '请输入审核意见',
             trigger: 'blur'
@@ -182,7 +187,6 @@
       },
       resetForm() {
         this.dialog = false
-        this.$refs['form'].resetFields()
       },
       doSubmit() {
         this.$refs['form'].validate((valid) => { //校验表单
@@ -198,20 +202,38 @@
         store.dispatch('GetInfo').then(res => {
           this.form.creator = res.id
           this.form.operationUser = res.id
-          console.log(this.form)
-          operationVerify(this.form, this.form.newlnvoiceStatus).then(res => {
-            this.$notify({
-              title: '操作成功',
-              type: 'success',
-              duration: 2500
+          //审核
+          if(!this.isverify){
+            financialVerify(this.form, this.form.newlnvoiceStatus).then(res => {
+              this.$notify({
+                title: '操作成功',
+                type: 'success',
+                duration: 2500
+              })
+              this.resetForm()
+              this.loading = false
+              this.$parent.init()
+            }).catch(err => {
+              this.loading = false
+              console.log(err.response.data.message)
             })
-            this.resetForm()
-            this.loading = false
-            this.$parent.init()
-          }).catch(err => {
-            this.loading = false
-            console.log(err.response.data.message)
-          })
+          }
+          //开票
+          else{
+            financialByLnvoice(this.form).then(res => {
+              this.$notify({
+                title: '操作成功',
+                type: 'success',
+                duration: 2500
+              })
+              this.resetForm()
+              this.loading = false
+              this.$parent.init()
+            }).catch(err => {
+              this.loading = false
+              console.log(err.response)
+            })
+          }
         })
       },
     }

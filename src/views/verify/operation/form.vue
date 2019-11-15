@@ -4,13 +4,13 @@
       <el-tab-pane name="first" label="审批信息管理">
         <el-form ref="form" :rules="rules" :model="form" size="small" label-width="660px">
           <el-divider content-position="left">审核信息</el-divider>
-          <el-row>
+         <!-- <el-row>
             <el-col :span="24">
               <el-form-item label="发票号码" label-width="100px">
                 <el-input v-model="form.lnvoiceNumber" />
               </el-form-item>
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row>
             <el-col :span="24">
               <el-form-item label="受票人" label-width="100px">
