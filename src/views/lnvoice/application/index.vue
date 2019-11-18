@@ -214,7 +214,7 @@ import applicationForm from './applicationForm'
       //申请明细
       definite(data) {
         const _this = this.$refs.applicationForm
-        _this.contractId = data.sysContractId
+        _this.contractId = data.id
         _this.init()
         _this.dialog = true
       },
