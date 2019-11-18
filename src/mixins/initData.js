@@ -7,7 +7,8 @@ export default {
     }
   },
   methods: {
-    async init() {
+    async init(callback=null) {
+
       if (!await this.beforeInit()) {
         return
       }
@@ -21,6 +22,9 @@ export default {
             this.loading = false
           }, this.time)
           resolve(res)
+          if(callback){
+          callback();
+          }
         }).catch(err => {
           this.loading = false
           reject(err)
