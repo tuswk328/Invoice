@@ -40,9 +40,9 @@
     <div style="display: inline-block;">
       <el-button :loading="downloadLoading" size="mini" class="filter-item" type="warning" @click="download">导出</el-button>
     </div>
-    <div style="display: inline-block;">
+    <!-- <div style="display: inline-block;">
       <el-button size="mini" class="filter-item" type="danger" @click="withdrawal">确认撤回</el-button>
-    </div>
+    </div> -->
     <!--表格渲染-->
     <el-table @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection" />
@@ -52,12 +52,6 @@
         </template>
       </el-table-column>
       <el-table-column prop="lnvoiceOrder" label="申清单号" width="150" />
-      <el-table-column prop="contNo" label="合同号" width="150" />
-      <el-table-column prop="contDate" label="合同日期" width="150">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.contDate) }}</span>
-        </template>
-      </el-table-column>
       <el-table-column prop="lnvoiceStatus" label="申请单状态">
         <template slot-scope="scope">
           <span>{{parseStatus(scope.row.lnvoiceStatus)}}</span>
@@ -260,6 +254,8 @@
           findByLnvoiceInfo(this.vertifys[0]).then(res => {
             if (res != '') {
               _this.form = res
+              _this.lnvoiceId=this.vertifys[0]
+              _this.init()
             }
           }).catch(err => {
             console.log(err)
@@ -270,7 +266,7 @@
       //申请明细
       definite(data) {
         const _this = this.$refs.applicationForm
-        _this.contractId = data.sysContractId
+        _this.contractId = data.id
         _this.init()
         _this.dialog = true
       },
@@ -300,7 +296,6 @@
               type: 'success',
               message: '撤回成功!'
             });
-
           }).catch(action => {});
         }
       }

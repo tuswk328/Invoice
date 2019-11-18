@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <applicationForm ref="applicationForm"/>
     <!--工具栏-->
     <div class="head-container demo-input-suffix">
       <el-row>
@@ -54,13 +55,12 @@
     <!--表格渲染-->
     <el-table @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection" />
-      <el-table-column label="申请单号" prop="lnvoiceOrder" width="150" align="center" />
-      <el-table-column prop="contNo" label="合同号" width="130"/>
-      <el-table-column prop="contDate" label="合同日期" width="100">
+      <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.contDate) }}</span>
+          <el-button slot="reference" type="danger" @click="definite(scope.row)" size="mini">申请明细</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="申请单号" prop="lnvoiceOrder" width="150" align="center" />
       <el-table-column prop="status" label="申请单状态">
         <template slot-scope="scope">
           <span>{{parseStatus(scope.row.lnvoiceStatus)}}</span>
@@ -106,8 +106,12 @@ import initData from '@/mixins/initData'
 import initDict from '@/mixins/initDict'
 import {parseTime,number_format,parseStatus} from '@/utils/index'
 import {getBindingContractByDrawwe} from '@/api/bindingContract.js'
+import applicationForm from './applicationForm'
   export default {
     mixins: [initData, initDict],
+    components: {
+      applicationForm
+    },
     data() {
       return {
         drawweList: [], //受票人集合
@@ -206,6 +210,13 @@ import {getBindingContractByDrawwe} from '@/api/bindingContract.js'
           })
           this.downloadLoading = false
         }
+      },
+      //申请明细
+      definite(data) {
+        const _this = this.$refs.applicationForm
+        _this.contractId = data.sysContractId
+        _this.init()
+        _this.dialog = true
       },
       // 数据转换
       formatJson(filterVal, jsonData) {

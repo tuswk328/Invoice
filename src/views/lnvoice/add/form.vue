@@ -70,6 +70,7 @@ export default {
     doSubmit() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
+          this.loading = true
           saveLnvoiceOrder(this.form.contractId,this.form.bindingContractId,this.form.lnvoiceMoney).then(res => {
             this.resetForm()
             this.$notify({

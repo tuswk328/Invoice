@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <!--form 组件-->
-    <eForm ref="form" :isverify="isverify" />
     <applicationForm ref="applicationForm" />
     <!--工具栏-->
     <div class="head-container demo-input-suffix">
@@ -32,27 +31,11 @@
         <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
         <el-button class="filter-item" size="mini" type="primary" icon="el-icon-refresh-left" @click="reset">重置</el-button>
       </el-col>
-      <!-- 导出 -->
+      <!-- 确认撤回 -->
     </div>
-    <!-- 审核-->
     <div style="display: inline-block;">
-      <el-button  size="mini" class="filter-item" type="primary" @click="vertify">审核</el-button>
-    </div>
-    <!-- 开票-->
-    <div style="display: inline-block;">
-      <el-button size="mini" class="filter-item" type="primary" @click="lnvoice">开票</el-button>
-    </div>
-    <!-- 撤销-->
-    <div style="display: inline-block;">
-      <el-button size="mini" class="filter-item" type="primary" @click="revoke">撤销</el-button>
-    </div>
-    <!-- 导出-->
-    <div style="display: inline-block;">
-      <el-button :loading="downloadLoading" size="mini" class="filter-item" type="warning" @click="download">导出</el-button>
-    </div>
-    <!-- <div style="display: inline-block;">
       <el-button size="mini" class="filter-item" type="danger" @click="withdrawal">确认撤回</el-button>
-    </div> -->
+    </div>
     <!--表格渲染-->
     <el-table @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection" />
@@ -109,41 +92,27 @@
     number_format,
     parseStatus
   } from '@/utils/index'
-  import eForm from './form'
   import applicationForm from './applicationForm'
   import {
     getBindingContractByDrawwe
   } from '@/api/bindingContract'
   import {
-    findByAuditLog,
-    findByLnvoiceInfo,
-    financialByRevoke
+    findByLnvoiceInfo,updateByWithdrawal
   } from '@/api/verify'
+  import {lnvoiceCommonList} from '@/utils/common'
+
 
   export default {
     mixins: [initData],
     components: {
-      eForm,
       applicationForm
     },
     data() {
       return {
-        isverify:false,//false代表开票,true代表审核
-        lnvoiceStatusList: [ //申请单状态集合
-          {
-            value: 2,
-            label: '运营已审'
-          },
-          {
-            value: 3,
-            label: '财务已审'
-          },
-        ],
-        downloadLoading: false,
+        lnvoiceStatusList:lnvoiceCommonList,  //申请单状态集合
         drawweList: [], //受票人集合
-        lvnoiceOrderList: [], //保存开票订单集合
-        multipleSelection: [],
-        vertifys: [], //选中的集合
+        multipleSelection:[],
+        vertifys:[]
       }
     },
     created() {
@@ -166,7 +135,7 @@
         this.params = {
           page: this.page,
           size: this.size,
-          auditCategory: 'finance'
+          contStatus:'已撤回'
         }
         if (lnvoiceStatus) {
           this.params['lnvoiceStatus'] = lnvoiceStatus
@@ -196,118 +165,11 @@
       //批量操作
       handleSelectionChange(val) {
         var isCheckbox = [] //保存已勾选的id
-        var lvnoiceOrderList = [] //保存已勾选的集合
         this.multipleSelection = val;
         for (var i = 0; i < this.multipleSelection.length; i++) {
           isCheckbox.push(this.multipleSelection[i].id)
-          lvnoiceOrderList.push(this.multipleSelection[i])
         }
         this.vertifys = isCheckbox
-        this.lvnoiceOrderList = lvnoiceOrderList
-      },
-      // 导出
-      download() {
-        if (this.lvnoiceOrderList == '') {
-          this.$notify({
-            title: '请选择要操作的数据',
-            type: 'error',
-            duration: 2500
-          })
-        } else {
-          this.downloadLoading = true
-          import('@/utils/export2Excel').then(excel => {
-            const tHeader = ['申请单号', '合同号', '合同日期', '申请单状态', '受票人', '承运方', '开票金额', '申请人', '申请时间', '运营审核人', '运营审核时间',
-              '运营审核意见', '财务审核人', '财务审核时间', '财务审核意见', '发票号码'
-            ]
-            const filterVal = ['lnvoiceOrder', 'contNo', 'contDate', 'lnvoiceStatus', 'drawwe',
-              'carrier', 'lnvoiceMoney', 'creatorName', 'creatDate',
-              'operationName', 'operationDate', 'operationComments', 'financialName',
-              'financialDate', 'financialComments', 'lnvoiceNumber'
-            ]
-            const data = this.formatJson(filterVal, this.lvnoiceOrderList)
-            excel.export_json_to_excel({
-              header: tHeader, //表头
-              data, //数据
-              filename: '开票管理_' + this.parseTime(new Date()) //文件名
-            })
-          })
-          this.downloadLoading = false
-        }
-      },
-      // 数据转换
-      formatJson(filterVal, jsonData) {
-        return jsonData.map(v => filterVal.map(j => {
-          if (j === 'contDate' || j === 'operationDate' || j === 'creatDate' || j === 'financialDate') {
-            return parseTime(v[j])
-          } else if (j === 'lnvoiceStatus') {
-            return parseStatus(v[j])
-          } else {
-            return v[j]
-          }
-        }))
-      },
-      //点击审核
-      vertify() {
-        if (this.vertifys == '') {
-          this.$notify({
-            title: '请选择要操作的数据',
-            type: 'error',
-            duration: 2500
-          })
-        } else if (this.vertifys.length > 1) {
-          this.$notify({
-            title: '请选择一条数据',
-            type: 'error',
-            duration: 2500
-          })
-        } else {
-          const _this = this.$refs.form
-          /* 查询审核信息根据申请单id*/
-          findByLnvoiceInfo(this.vertifys[0]).then(res => {
-            if (res != '') {
-              _this.form = res
-              //运营审核才能进行审核
-                _this.lnvoiceId=this.vertifys[0]
-                _this.init()
-                 this.isverify = false
-                _this.dialog = true
-            }
-          }).catch(err => {
-            console.log(err)
-          })
-
-        }
-      },
-      //点击开票
-      lnvoice() {
-        if (this.vertifys == '') {
-          this.$notify({
-            title: '请选择要操作的数据',
-            type: 'error',
-            duration: 2500
-          })
-        } else if (this.vertifys.length > 1) {
-          this.$notify({
-            title: '请选择一条数据',
-            type: 'error',
-            duration: 2500
-          })
-        } else {
-          const _this = this.$refs.form
-          /* 查询审核信息根据申请单id*/
-          findByLnvoiceInfo(this.vertifys[0]).then(res => {
-            if (res != '') {
-              _this.form = res
-              //财务已审才能开票
-                _this.lnvoiceId=this.vertifys[0]
-                _this.init()
-                 this.isverify = true
-                _this.dialog = true
-            }
-          }).catch(err => {
-            console.log(err)
-          })
-        }
       },
       //申请明细
       definite(data) {
@@ -316,8 +178,8 @@
         _this.init()
         _this.dialog = true
       },
-      //撤销
-      revoke() {
+      //确认撤回
+      withdrawal() {
         if (this.vertifys == '') {
           this.$notify({
             title: '请选择要操作的数据',
@@ -331,17 +193,16 @@
             duration: 2500
           })
         } else {
-          this.$confirm('确认撤销, 是否继续?', '提示', {
+          this.$confirm('确认撤回, 是否继续?', '提示', {
             distinguishCancelAndClose: true,
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            //撤销通过
             findByLnvoiceInfo(this.vertifys[0]).then(res => {
-              //已开票才能撤销
-              if(res.lnvoiceStatus==4){
-                financialByRevoke(res).then(res => {
+              //除了确认撤回其他均可撤回
+              if(res.lnvoiceStatus!=10){
+                updateByWithdrawal(res).then(res => {
                   this.init()
                 }).catch(err => {
                   console.log(err)
@@ -357,9 +218,7 @@
             }).catch(err => {
               console.log(err)
             })
-
           }).catch(action => {});
-
         }
       }
     }

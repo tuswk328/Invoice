@@ -100,6 +100,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="contractNum" label="合同号"/>
+      <el-table-column prop="identificationNumber" label="纳税人识别号"/>
       <el-table-column prop="drawwe" label="客户名称"/>
       <el-table-column prop="carrierName" label="承运方"/>
       <el-table-column prop="startDate" label="生效日期">
@@ -279,6 +280,7 @@ export default {
         contractImage: data.contractImage,
         contractYear:data.contractYear,
         contractStatusId:data.contractStatusId,
+        identificationNumber:data.identificationNumber,
         creator:data.creator
       }
       _this.imageFrontUrl=data.contractImage

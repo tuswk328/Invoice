@@ -4,7 +4,7 @@
     <eForm ref="form" :is-add="isAdd" :dicts="dicts"/>
     <el-row :gutter="20">
       <!--部门数据-->
-      <el-col :xs="9" :sm="6" :md="4" :lg="4" :xl="4">
+       <el-col :xs="9" :sm="6" :md="4" :lg="4" :xl="4">
         <div class="head-container">
           <el-input v-model="deptName" clearable placeholder="输入部门名称搜索" prefix-icon="el-icon-search" style="width: 100%;" class="filter-item" @input="getDeptDatas"/>
         </div>
@@ -30,7 +30,7 @@
               @click="add">新增</el-button>
           </div>
           <!-- 导出 -->
-          <div style="display: inline-block;">
+          <!-- <div style="display: inline-block;">
             <el-button
               v-permission="['ADMIN','USER_ALL','USER_SELECT']"
               :loading="downloadLoading"
@@ -39,7 +39,7 @@
               type="warning"
               icon="el-icon-download"
               @click="download">导出</el-button>
-          </div>
+          </div> -->
         </div>
         <!--表格渲染-->
         <el-table v-loading="loading" :data="data" size="small" style="width: 100%;">
@@ -50,6 +50,11 @@
           <el-table-column label="部门 / 岗位">
             <template slot-scope="scope">
               <div>{{ scope.row.dept.name }} / {{ scope.row.job.name }}</div>
+            </template>
+          </el-table-column> 
+           <el-table-column label="岗位">
+            <template slot-scope="scope">
+              <div>{{ scope.row.job.name }}</div>
             </template>
           </el-table-column>
           <el-table-column label="状态" align="center">

@@ -107,7 +107,7 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-      this.init()
+      this.loading=false
       this.getDictMap('carrier')
      this.getBindingContractByDrawwe()//查询收货单位
     })

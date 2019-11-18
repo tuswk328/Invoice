@@ -54,12 +54,6 @@
        </template>
       </el-table-column>
       <el-table-column  prop="lnvoiceOrder" label="申清单号" width="150"/>
-      <el-table-column  prop="contNo" label="合同号" width="150"/>
-      <el-table-column prop="contDate" label="合同日期" width="150">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.contDate) }}</span>
-        </template>
-      </el-table-column>
       <el-table-column  prop="lnvoiceStatus" label="申请单状态">
           <template slot-scope="scope">
             <span>{{parseStatus(scope.row.lnvoiceStatus)}}</span>
@@ -239,7 +233,7 @@ export default {
     //申请明细
     definite(data){
       const _this = this.$refs.applicationForm
-        _this.contractId = data.sysContractId
+        _this.contractId = data.id
         _this.init()
         _this.dialog = true
       },

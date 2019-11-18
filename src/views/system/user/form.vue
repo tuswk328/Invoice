@@ -16,7 +16,7 @@
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="form.email" />
       </el-form-item>
-      <el-form-item label="部门">
+       <el-form-item label="部门">
         <treeselect v-model="deptId" :options="depts" :style="style" placeholder="选择部门" @select="selectFun" />
       </el-form-item>
       <el-form-item label="岗位">
@@ -27,7 +27,7 @@
             :label="item.name"
             :value="item.id"/>
         </el-select>
-      </el-form-item>
+      </el-form-item> 
       <el-form-item style="margin-bottom: 0px;" label="角色">
         <el-select v-model="roleIds" style="width: 450px;" multiple placeholder="请选择">
           <el-option

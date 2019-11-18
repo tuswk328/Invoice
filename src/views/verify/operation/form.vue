@@ -194,11 +194,11 @@
           }
         })
       },
+      //审核通过
       doVerify() {
         store.dispatch('GetInfo').then(res => {
           this.form.creator = res.id
           this.form.operationUser = res.id
-          console.log(this.form)
           operationVerify(this.form, this.form.newlnvoiceStatus).then(res => {
             this.$notify({
               title: '操作成功',

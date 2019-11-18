@@ -6,7 +6,7 @@
           <el-divider content-position="left">审核信息</el-divider>
           <el-row v-if="isverify">
             <el-col :span="24">
-              <el-form-item label="发票号码" label-width="100px">
+              <el-form-item label="发票号码" label-width="100px" prop="lnvoiceNumber">
                 <el-input v-model="form.lnvoiceNumber" />
               </el-form-item>
             </el-col>
@@ -32,7 +32,7 @@
               </el-form-item>
             </el-col>
             <el-col  v-if="isverify">
-              <el-form-item label="税率" label-width="100px">
+              <el-form-item label="税率" label-width="100px" prop="taxRate">
                 <el-input  v-model="form.taxRate"  />
               </el-form-item>
             </el-col>
@@ -163,6 +163,16 @@
             message: '请输入审核意见',
             trigger: 'blur'
           }],
+          taxRate: [{
+            required: true,
+            message: '请输入税率',
+            trigger: 'blur'
+          }],
+          lnvoiceNumber: [{
+            required: true,
+            message: '请输入发票号码',
+            trigger: 'blur'
+          }],
         }
       }
     },
@@ -192,7 +202,7 @@
         this.$refs['form'].validate((valid) => { //校验表单
           if (valid) {
             this.loading = true
-            this.doVerify()
+              this.doVerify()
           } else {
             return false
           }
@@ -201,38 +211,58 @@
       doVerify() {
         store.dispatch('GetInfo').then(res => {
           this.form.creator = res.id
-          this.form.operationUser = res.id
+          this.form.financialUser = res.id
           //审核
           if(!this.isverify){
-            financialVerify(this.form, this.form.newlnvoiceStatus).then(res => {
-              this.$notify({
-                title: '操作成功',
-                type: 'success',
-                duration: 2500
-              })
-              this.resetForm()
-              this.loading = false
-              this.$parent.init()
-            }).catch(err => {
-              this.loading = false
-              console.log(err.response.data.message)
-            })
+             if(this.form.lnvoiceStatus==2){
+               financialVerify(this.form, this.form.newlnvoiceStatus).then(res => {
+                 this.$notify({
+                   title: '操作成功',
+                   type: 'success',
+                   duration: 2500
+                 })
+                 this.resetForm()
+                 this.loading = false
+                 this.$parent.init()
+               }).catch(err => {
+                 this.loading = false
+                 console.log(err.response.data.message)
+               })
+             }
+             else{
+               this.loading = false
+               this.$notify({
+                 title: '状态不符,请勿重复操作',
+                 type: 'error',
+                 duration: 2500
+               })
+             }
           }
           //开票
           else{
-            financialByLnvoice(this.form).then(res => {
+            if(this.form.lnvoiceStatus==3){
+              financialByLnvoice(this.form).then(res => {
+                this.$notify({
+                  title: '操作成功',
+                  type: 'success',
+                  duration: 2500
+                })
+                this.resetForm()
+                this.loading = false
+                this.$parent.init()
+              }).catch(err => {
+                this.loading = false
+                console.log(err.response)
+              })
+            }
+            else{
+              this.loading = false
               this.$notify({
-                title: '操作成功',
-                type: 'success',
+                title: '状态不符,请勿重复操作',
+                type: 'error',
                 duration: 2500
               })
-              this.resetForm()
-              this.loading = false
-              this.$parent.init()
-            }).catch(err => {
-              this.loading = false
-              console.log(err.response)
-            })
+            }
           }
         })
       },

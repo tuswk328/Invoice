@@ -45,3 +45,13 @@ export function financialByRevoke(data) {
     data
   })
 }
+
+export function updateByWithdrawal(data) {
+  return request({
+    url: 'api/updateByWithdrawal',
+    method: 'post',
+    data
+  })
+}
+
+
