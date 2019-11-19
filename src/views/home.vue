@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-editor-container">
+    <!-- <div class="dashboard-editor-container">
       <panel-group/>
 
       <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
@@ -24,7 +24,7 @@
           </div>
         </el-col>
       </el-row>
-    </div>
+    </div> -->
   </div>
 </template>
 

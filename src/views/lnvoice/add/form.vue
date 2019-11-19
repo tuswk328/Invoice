@@ -21,7 +21,7 @@
         <el-input v-model="form.contCost" disabled style="width: 370px;"  />
       </el-form-item>
       <el-form-item label="开票金额" label-width="100px" prop="lnvoiceMoney">
-        <el-input v-model.number="form.lnvoiceMoney"  maxlength="8"
+        <el-input v-model.number="form.lnvoiceMoney"  maxlength="6"
     oninput="value=value.replace(/[^\d.]/g,'')" style="width: 370px;"  />
       </el-form-item>
     </el-form>
