@@ -75,7 +75,7 @@
       <el-table-column  prop="contractStatus" label="合同状态"/>
       <el-table-column prop="contractDate" label="合同时间" width="100">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.contractDate) }}</span>
+          <span>{{scope.row.contractDate==null?null:parseTime(scope.row.contractDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column  prop="lotNo" label="运输清单号" width="150"/>
