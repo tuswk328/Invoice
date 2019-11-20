@@ -3,16 +3,16 @@
     <!--表单组件-->
     <eForm ref="form" :isAdd="isAdd" :dictMap="dictMap"/>
     <el-row :gutter="24">
-      <el-col :xs="17" :sm="18" :md="20" :lg="24" :xl="24">
+      <el-col>
     <!--工具栏-->
     <div class="head-container">
       <!-- 搜索 -->
             <el-row >
-             <el-col :span="6"  class="filter-item">
+             <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
                <span class="label">合同号:</span>
                <el-input v-model="query.contractNum" clearable placeholder="请输入合同号" style="width: 200px;" @keyup.enter.native="toQuery"/>
              </el-col>
-             <el-col :span="6"  class="filter-item">
+             <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8"  class="filter-item">
                <span class="label">受票人:</span>
               <el-select filterable  v-model="query.drawwe" clearable placeholder="请选择受票人" >
                   <el-option
@@ -23,7 +23,7 @@
                   </el-option>
               </el-select>
              </el-col>
-             <el-col :span="6"  class="filter-item">
+             <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8"  class="filter-item">
               <span class="label">承运方:</span>
               <el-select filterable  v-model="query.carrier"  clearable placeholder="请输入承运方"  @keyup.enter.native="toQuery" style="width: 200px;">
                   <el-option
@@ -36,11 +36,11 @@
              </el-col>
             </el-row>
             <el-row >
-              <el-col :span="6"  class="filter-item">
+              <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
                 <span class="label">开始时间:</span>
                 <el-date-picker clearable style="width: 200px;" v-model="query.startDate"  type="date" placeholder="选择开始日期"></el-date-picker>
               </el-col>
-              <el-col :span="6"  class="filter-item">
+              <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
                 <span class="label">结束时间:</span>
                 <el-date-picker style="width: 200px;" clearable v-model="query.endDate"  type="date" placeholder="选择截止日期" ></el-date-picker>
               </el-col>

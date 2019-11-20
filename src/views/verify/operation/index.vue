@@ -6,12 +6,12 @@
     <!--工具栏-->
     <div class="head-container demo-input-suffix">
       <el-row>
-        <el-col :span="6" class="filter-item">
+        <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" class="filter-item">
           <span class="label">申请单号:</span>
           <el-input v-model="query.lnvoiceOrder" clearable placeholder="请输入申请单号" style="width: 200px;"
             @keyup.enter.native="toQuery" />
         </el-col>
-        <el-col :span="6" class="filter-item">
+        <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" class="filter-item">
           <span class="label">申请单状态:</span>
           <el-select v-model="query.lnvoiceStatus" clearable filterable placeholder="请选择申请单状态" style="width: 200px;"
             @keyup.enter.native="toQuery">
@@ -19,7 +19,7 @@
             </el-option>
           </el-select>
         </el-col>
-        <el-col :span="6" class="filter-item">
+        <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" class="filter-item">
           <span class="label">受票人:</span>
           <el-select v-model="query.drawwe" clearable filterable placeholder="请选择受票人" style="width: 200px;"
             @keyup.enter.native="toQuery">
@@ -304,5 +304,9 @@
 </script>
 
 <style scoped>
-
+.label {
+  display: inline-block;
+  width:100px;
+  text-align: right;
+}
 </style>

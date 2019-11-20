@@ -5,7 +5,7 @@
     <!--工具栏-->
     <div class="head-container">
       <el-row>
-         <el-col  :span="6"  class="filter-item">
+         <el-col  :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
            <span class="label">受票人:</span>
            <el-select v-model="query.drawwe" clearable filterable placeholder="请选择受票人" style="width: 200px;" @keyup.enter.native="toQuery">
                <el-option
@@ -16,7 +16,7 @@
                </el-option>
            </el-select>
          </el-col>
-         <el-col :span="6"  class="filter-item">
+         <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
           <span class="label"> 承运方:</span>
            <el-select filterable  v-model="query.carrier"  clearable placeholder="请输入承运方"  @keyup.enter.native="toQuery" style="width: 200px;">
                <el-option
@@ -27,17 +27,18 @@
                </el-option>
            </el-select>
          </el-col>
-      </el-row>
-      <el-row >
-         <el-col :span="6">
+           <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" class="filter-item">
              <span class="label"> 合同号:</span>
             <el-input v-model="query.contNo" clearable placeholder="请输入合同号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
          </el-col>
-        <el-col :span="6"  class="filter-item">
+      </el-row>
+      <el-row >
+       
+        <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
          <span class="label" > 开始时间:</span>
           <el-date-picker clearable style="width: 200px;" v-model="query.startDate"  type="date" placeholder="选择开始日期"></el-date-picker>
         </el-col>
-        <el-col :span="6"  class="filter-item">
+        <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
           <span class="label" > 结束时间: </span>
           <el-date-picker style="width: 200px;" clearable v-model="query.endDate"  type="date" placeholder="选择截止日期" ></el-date-picker>
         </el-col>
