@@ -83,12 +83,12 @@
       <el-table-column  prop="consignmentStatus" label="托运单状态" width="100"/>
       <el-table-column prop="createDate" label="运单创建日期" width="100">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createDate) }}</span>
+          <span>{{ scope.row.createDate==null?null:parseTime(scope.row.createDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="orderDate" label="下单时间" width="100">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.orderDate) }}</span>
+          <span>{{ scope.row.orderDate==null?null:parseTime(scope.row.orderDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column  prop="shipperName" label="发货单位" width="150"/>
@@ -101,7 +101,7 @@
       <el-table-column  prop="driverName" label="司机信息" width="100"/>
       <el-table-column prop="departDate" label="发车时间" width="100">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.departDate) }}</span>
+          <span>{{ scope.row.orderDate==null?null:parseTime(scope.row.departDate)  }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="insureResult" label="投保结果"/>
