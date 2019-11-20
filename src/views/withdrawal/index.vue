@@ -37,21 +37,21 @@
       <el-button size="mini" class="filter-item" type="danger" @click="withdrawal">确认撤回</el-button>
     </div>
     <!--表格渲染-->
-    <el-table @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
+    <el-table  height="500" @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection" />
       <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-button slot="reference" type="danger" @click="definite(scope.row)" size="mini">申请明细</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="lnvoiceOrder" label="申清单号" width="150" />
+      <el-table-column prop="lnvoiceOrder" label="申清单号" width="150" align="center"/>
       <el-table-column prop="lnvoiceStatus" label="申请单状态">
         <template slot-scope="scope">
           <span>{{parseStatus(scope.row.lnvoiceStatus)}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="drawwe" label="受票人" width="100" />
-      <el-table-column prop="carrier" label="承运方" width="100" />
+      <el-table-column prop="carrier" label="承运方" width="100" align="center"/>
       <el-table-column prop="lnvoiceMoney" label="开票金额" width="100">
         <template slot-scope="scope">
           <span>{{number_format(scope.row.lnvoiceMoney, 2)}}</span>
@@ -71,7 +71,7 @@
       </el-table-column>
       <el-table-column prop="operationComments" label="运营审核意见" width="100" />
       <el-table-column prop="financialName" label="财务审核人" width="100" />
-      <el-table-column prop="financialDate" label="财务审核时间" width="100">
+      <el-table-column prop="financialDate" label="财务审核时间" width="130" sortable>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.financialDate) }}</span>
         </template>

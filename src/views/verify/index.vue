@@ -45,9 +45,9 @@
         @click="download">导出</el-button>
     </div>
     <!--表格渲染-->
-    <el-table @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
+    <el-table height="500" @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection" />
-       <el-table-column label="操作" width="200" align="center" >
+       <el-table-column label="操作" width="220" align="center" >
        <template slot-scope="scope">
           <el-button size="mini" type="primary" @click="verifyInfo(scope.row)">审核详情</el-button>
           <el-button slot="reference" type="danger"  @click="definite(scope.row)" size="mini">申请明细</el-button>
@@ -66,7 +66,7 @@
             <span>{{number_format(scope.row.lnvoiceMoney, 2)}}</span>
           </template>
       </el-table-column>
-      <el-table-column prop="creatorName" label="申请人" width="150"/>
+      <el-table-column prop="creatorName" label="申请人" width="100"/>
       <el-table-column prop="creatDate" label="申请时间" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.creatDate) }}</span>
@@ -80,7 +80,7 @@
       </el-table-column>
       <el-table-column prop="operationComments" label="运营审核意见" width="100"/>
       <el-table-column  prop="financialName" label="财务审核人" width="100"/>
-      <el-table-column prop="financialDate" label="财务审核时间" width="100">
+      <el-table-column prop="financialDate" label="财务审核时间" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.financialDate) }}</span>
         </template>

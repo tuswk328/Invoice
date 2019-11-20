@@ -114,7 +114,7 @@
     </div>
     <el-row :gutter="20"></el-row>
     <!--表格渲染-->
-    <el-table
+    <el-table height="500" 
       @selection-change="handleSelectionChange"
       v-loading="loading"
       :data="data"
@@ -127,7 +127,7 @@
           <el-button slot="reference" type="danger" @click="definite(scope.row)" size="mini">申请明细</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="申请单号" prop="lnvoiceOrder" width="150" align="center" />
+      <el-table-column label="申请单号" prop="lnvoiceOrder" width="150" align="center" sortable/>
       <el-table-column prop="status" label="申请单状态">
         <template slot-scope="scope">
           <span>{{parseStatus(scope.row.lnvoiceStatus)}}</span>
@@ -135,26 +135,26 @@
       </el-table-column>
       <el-table-column prop="drawwe" label="受票人" width="100" />
       <el-table-column prop="carrier" label="承运方" width="100" />
-      <el-table-column prop="lnvoiceMoney" label="开票金额" width="130">
+      <el-table-column prop="lnvoiceMoney" label="开票金额" width="130" sortable>
         <template slot-scope="scope">
           <span>{{number_format(scope.row.lnvoiceMoney, 2)}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="creatorName" label="申请人" />
-      <el-table-column prop="creatDate" label="申请时间" width="100">
+      <el-table-column prop="creatDate" label="申请时间" width="100" sortable>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.creatDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="operationName" label="运营审核人" />
-      <el-table-column prop="operationDate" label="运营审核时间" width="100">
+      <el-table-column prop="operationDate" label="运营审核时间" width="130" sortable>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.operationDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="operationComments" label="运营审核意见" width="110" />
       <el-table-column prop="financialName" label="财务审核人" width="100" />
-      <el-table-column prop="financialDate" label="财务审核时间" width="100">
+      <el-table-column prop="financialDate" label="财务审核时间" width="130" sortable>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.financialDate) }}</span>
         </template>

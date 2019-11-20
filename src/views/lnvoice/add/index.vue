@@ -62,17 +62,17 @@
       </div>
     </div>
     <!--表格渲染-->
-    <el-table @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
+    <el-table height="500" @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection"/>
-      <el-table-column label="合同号"   prop="contNo" width="85" align="center"/>
+      <el-table-column label="合同号"   prop="contNo"/>
       <el-table-column  prop="contStatus" label="合同状态"/>
-      <el-table-column  prop="engine" label="合同日期">
+      <el-table-column  prop="engine" label="合同日期" sortable>
         <template slot-scope="scope">
             <span>{{ parseTime(scope.row.contDate) }}</span>
           </template>
        </el-table-column>
       <el-table-column prop="drawwe" label="受票人"/>
-      <el-table-column prop="contCost" label="合同金额"/>
+      <el-table-column prop="contCost" label="合同金额" sortable/>
       <el-table-column  prop="count" label="总件数"/>
       <!-- <el-table-column  prop="engine" label="所属合同"/> -->
     </el-table>

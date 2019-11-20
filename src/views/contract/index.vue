@@ -86,15 +86,15 @@
     </div>
     <!--表格渲染-->
     <div  ref="tableRef" style="height:auto;">
-      <el-table :height="tableHeight" @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
+      <el-table height="500" @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection"/>
-      <el-table-column label="合同编号">
+      <el-table-column label="合同编号" align="center">
       <template  slot-scope="scope">
         <a style="font-weight: 700;"  @click="edit(scope.row)">{{scope.row.contractNo}}</a>
       </template>
       </el-table-column>
       <el-table-column prop="contractStatusName" label="合同状态"/>
-      <el-table-column prop="createDate" label="合同创建日期" width="120">
+      <el-table-column prop="createDate" label="合同创建日期" width="120" sortable>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createDate) }}</span>
         </template>
@@ -103,12 +103,12 @@
       <el-table-column prop="identificationNumber" label="纳税人识别号"/>
       <el-table-column prop="drawwe" label="客户名称"/>
       <el-table-column prop="carrierName" label="承运方"/>
-      <el-table-column prop="startDate" label="生效日期">
+      <el-table-column prop="startDate" label="生效日期" sortable>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.startDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="endDate" label="失效日期">
+      <el-table-column prop="endDate" label="失效日期" sortable>
         <template slot-scope="scope">
           <span>{{parseTime(scope.row.endDate) }}</span>
         </template>
