@@ -86,7 +86,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="financialName" label="财务审核人" width="100" />
-      <el-table-column prop="financialDate" label="财务审核时间" width="100" sortable>
+      <el-table-column prop="financialDate" label="财务审核时间" width="120" sortable>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.financialDate) }}</span>
         </template>
