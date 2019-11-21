@@ -4,13 +4,7 @@
       <el-tab-pane name="first" label="审批信息管理">
         <el-form ref="form" :rules="rules" :model="form" size="small" label-width="660px">
           <el-divider content-position="left">审核信息</el-divider>
-          <el-row v-if="isverify">
-            <el-col :span="24">
-              <el-form-item label="发票号码" label-width="100px" prop="lnvoiceNumber">
-                <el-input v-model="form.lnvoiceNumber" />
-              </el-form-item>
-            </el-col>
-          </el-row>
+          
           <el-row>
             <el-col :span="24">
               <el-form-item label="受票人" label-width="100px">
@@ -26,33 +20,34 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col >
-              <el-form-item label="受票人税号" label-width="100px">
-                <el-input disabled v-model="form.identificationNumber" />
+            <el-col :span="12">
+              <el-form-item label="受票人税号" label-width="100px" >
+                <el-input disabled v-model="form.identificationNumber" style="width: 280px;"/>
               </el-form-item>
             </el-col>
-            <el-col  v-if="isverify">
+            <el-col  v-if="isverify" :span="12">
               <el-form-item label="税率" label-width="100px" prop="taxRate">
-                <el-input  v-model="form.taxRate"  />
+                <el-input  v-model="form.taxRate"  style="width: 280px;"/>
               </el-form-item>
             </el-col>
           </el-row>
+          
           <el-row>
             <el-col :span="12">
               <el-form-item label="确认金额" label-width="100px">
-                <el-input disabled v-model="form.contCost" style="width: 150px;" />
+                <el-input disabled v-model="form.contCost" style="width: 280px;" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="开票金额" label-width="100px">
-                <el-input disabled v-model="form.lnvoiceMoney" style="width: 150px;" />
+                <el-input disabled v-model="form.lnvoiceMoney" style="width: 280px;" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="申请单状态" label-width="100px">
-                <el-select disabled v-model="form.lnvoiceStatus" style="width: 200px;">
+                <el-select disabled v-model="form.lnvoiceStatus" style="width: 280px;">
                   <el-option v-for="item in lnvoiceCommonList" :key="item.id" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
@@ -60,7 +55,14 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="申请人" label-width="100px">
-                <el-input disabled v-model="form.creatorName" style="width: 150px;" />
+                <el-input disabled v-model="form.creatorName" style="width: 280px;" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row v-if="isverify">
+            <el-col :span="24">
+              <el-form-item label="发票号码" label-width="100px" prop="lnvoiceNumber">
+                <el-input v-model="form.lnvoiceNumber" />
               </el-form-item>
             </el-col>
           </el-row>
