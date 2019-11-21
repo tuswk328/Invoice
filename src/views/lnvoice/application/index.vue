@@ -112,9 +112,8 @@
         @click="download"
       >导出</el-button>
     </div>
-    <el-row :gutter="20"></el-row>
     <!--表格渲染-->
-    <el-table height="500" 
+    <el-table height="500"
       @selection-change="handleSelectionChange"
       v-loading="loading"
       :data="data"
@@ -128,7 +127,7 @@
         </template>
       </el-table-column>
       <el-table-column label="申请单号" prop="lnvoiceOrder" width="150" align="center" sortable/>
-      <el-table-column prop="status" label="申请单状态">
+      <el-table-column prop="status" label="申请单状态" width="100">
         <template slot-scope="scope">
           <span>{{parseStatus(scope.row.lnvoiceStatus)}}</span>
         </template>
@@ -355,7 +354,7 @@ export default {
 <style scoped>
 .label {
   display: inline-block;
-  width: 80px;
+  width: 100px;
   text-align: right;
 }
 </style>

@@ -2,12 +2,11 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container demo-input-suffix">
-      <el-row >
+      <el-row>
          <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6" class="filter-item">
            <span class="label">合同编号: </span>
             <el-input v-model="query.contractNo" clearable placeholder="请输入合同号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
          </el-col>
-
          <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6"  class="filter-item">
            <span class="label">运输清单号:</span>
             <el-input v-model="query.lotNo" clearable placeholder="请输入运输清单号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
@@ -75,7 +74,7 @@
       <el-table-column  prop="contractStatus" label="合同状态"/>
       <el-table-column prop="contractDate" label="合同时间" width="100" sortable>
         <template slot-scope="scope">
-          <span>{{scope.row.contractDate==null?null:parseTime(scope.row.contractDate) }}</span>
+          <span>{{scope.row.contractDate}}</span>
         </template>
       </el-table-column>
       <el-table-column  prop="lotNo" label="运输清单号" width="150" align="center"/>

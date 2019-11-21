@@ -6,13 +6,11 @@
     <!--工具栏-->
     <div class="head-container demo-input-suffix">
       <el-row>
-        
         <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" class="filter-item">
           <span class="label">申请单号:</span>
           <el-input v-model="query.lnvoiceOrder" clearable placeholder="请输入申请单号" style="width: 200px;"
             @keyup.enter.native="toQuery" />
         </el-col>
-      
         <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" class="filter-item">
           <span class="label">申请单状态:</span>
           <el-select v-model="query.lnvoiceStatus" clearable filterable placeholder="请选择申请单状态" style="width: 200px;"
@@ -30,10 +28,12 @@
           </el-select>
         </el-col>
       </el-row>
-      <el-col :offset="20">
-        <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
-        <el-button class="filter-item" size="mini" type="primary" icon="el-icon-refresh-left" @click="reset">重置</el-button>
-      </el-col>
+      <el-row>
+        <el-col :offset="20">
+          <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
+          <el-button class="filter-item" size="mini" type="primary" icon="el-icon-refresh-left" @click="reset">重置</el-button>
+        </el-col>
+      </el-row>
       <!-- 导出 -->
     </div>
     <!-- 审核-->
@@ -63,8 +63,8 @@
           <el-button slot="reference" type="danger" @click="definite(scope.row)" size="mini">申请明细</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="lnvoiceOrder" label="申清单号" width="150" />
-      <el-table-column prop="lnvoiceStatus" label="申请单状态">
+      <el-table-column prop="lnvoiceOrder" label="申清单号" width="150" sortable/>
+      <el-table-column prop="lnvoiceStatus" label="申请单状态" width="150" sortable>
         <template slot-scope="scope">
           <span>{{parseStatus(scope.row.lnvoiceStatus)}}</span>
         </template>
@@ -77,20 +77,20 @@
         </template>
       </el-table-column>
       <el-table-column prop="creatorName" label="申请人" width="150" />
-      <el-table-column prop="creatDate" label="申请时间" width="150">
+      <el-table-column prop="creatDate" label="申请时间" width="150" sortable>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.creatDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="operationName" label="运营审核人" width="100" />
-      <el-table-column prop="operationDate" label="运营审核时间" width="150">
+      <el-table-column prop="operationDate" label="运营审核时间" width="150" sortable>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.operationDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="operationComments" label="运营审核意见" width="100" />
       <el-table-column prop="financialName" label="财务审核人" width="100" />
-      <el-table-column prop="financialDate" label="财务审核时间" width="100">
+      <el-table-column prop="financialDate" label="财务审核时间" width="100" sortable>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.financialDate) }}</span>
         </template>
