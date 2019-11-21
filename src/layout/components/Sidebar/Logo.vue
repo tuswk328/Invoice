@@ -3,8 +3,8 @@
     <!-- 缩小时显示的logo，可以自定义，这里直接使用图标库中的 -->
     <svg-icon v-if="isCollapse" icon-class="smalllogo" />
     <!--正常状态下显示的，可以使用本地的logoImg-->
-    <div style="height:90px;align-items: center;">
-      <img src="../../../../static/icon1.png" style="width:auto;height:auto;max-width:100%;max-height:100%;">
+    <div style="margin-top: 5px;">
+      <img src="../../../../static/img/logo.png" style="width:auto;height:auto;max-width:90%;max-height:90%;">
     </div>
   </el-menu-item>
 </template>

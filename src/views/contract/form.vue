@@ -237,6 +237,7 @@ export default {
            this.loading = false
            this.imageFrontFile=''
            this.$parent.init()
+		       this.$parent.getBindingContractByDrawwe()
          }).catch(err => {
            this.loading = false
            console.log(err.response.data.message)
