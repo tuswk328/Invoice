@@ -127,7 +127,7 @@
       number_format,
       parseTime,
       beforeInit() {
-        this.url = 'api/findByLnvoiceOrder'
+        this.url = 'api/findByWithDrawalLnvoiceOrder'
         const query = this.query
         const lnvoiceOrder = query.lnvoiceOrder
         const lnvoiceStatus = query.lnvoiceStatus
@@ -135,7 +135,6 @@
         this.params = {
           page: this.page,
           size: this.size,
-          contStatus:'已撤回'
         }
         if (lnvoiceStatus) {
           this.params['lnvoiceStatus'] = lnvoiceStatus

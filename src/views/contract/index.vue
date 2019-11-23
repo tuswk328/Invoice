@@ -7,11 +7,11 @@
     <!--工具栏-->
     <div class="head-container">
       <!-- 搜索 -->
-            <el-row >
+            <el-row>
              <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
                <span class="label">合同号:</span>
                <el-input v-model="query.contractNum" clearable placeholder="请输入合同号" style="width: 200px;" @keyup.enter.native="toQuery"/>
-             </el-col>
+             </el-col>             
              <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8"  class="filter-item">
                <span class="label">受票人:</span>
               <el-select filterable  v-model="query.drawwe" clearable placeholder="请选择受票人" >

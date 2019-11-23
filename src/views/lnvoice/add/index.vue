@@ -4,48 +4,54 @@
     <eForm ref="form" />
     <!--工具栏-->
     <div class="head-container">
-      <el-row>
-         <el-col  :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
-           <span class="label">受票人:</span>
-           <el-select v-model="query.drawwe" clearable filterable placeholder="请选择受票人" style="width: 200px;" @keyup.enter.native="toQuery">
-               <el-option
-                 v-for="item in drawweList"
-                 :key="item.id"
-                 :label="item.drawwe"
-                 :value="item.drawwe">
-               </el-option>
-           </el-select>
-         </el-col>
-         <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
-          <span class="label"> 承运方:</span>
-           <el-select filterable  v-model="query.carrier"  clearable placeholder="请输入承运方"  @keyup.enter.native="toQuery" style="width: 200px;">
-               <el-option
-                 v-for="item in dictMap.carrier"
-                 :key="item.value"
-                 :label="item.label"
-                 :value="item.id" >
-               </el-option>
-           </el-select>
-         </el-col>
+      <el-form ref="query" :rules="rules" :model="query" label-width="100px">
+        <el-row>
+           <el-col  :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
+               <el-form-item label="受票人:" prop="drawwe">
+                 <el-select v-model="query.drawwe" clearable filterable placeholder="请选择受票人" style="width: 200px;" @keyup.enter.native="toQuery">
+                     <el-option
+                       v-for="item in drawweList"
+                       :key="item.id"
+                       :label="item.drawwe"
+                       :value="item.drawwe">
+                     </el-option>
+                 </el-select>
+                </el-form-item>
+           </el-col>
+           <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
+           <el-form-item label="承运方:" >
+             <el-select filterable  v-model="query.carrier"  clearable placeholder="请输入承运方"  @keyup.enter.native="toQuery" style="width: 200px;">
+                 <el-option
+                   v-for="item in dictMap.carrier"
+                   :key="item.value"
+                   :label="item.label"
+                   :value="item.id" >
+                 </el-option>
+             </el-select>
+           </el-form-item>
+           </el-col>
            <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" class="filter-item">
-             <span class="label"> 合同号:</span>
-            <el-input v-model="query.contNo" clearable placeholder="请输入合同号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
-         </el-col>
-      </el-row>
-      <el-row >
-       
-        <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
-         <span class="label" > 开始时间:</span>
-          <el-date-picker clearable style="width: 200px;" v-model="query.startDate"  type="date" placeholder="选择开始日期"></el-date-picker>
-        </el-col>
-        <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
-          <span class="label" > 结束时间: </span>
-          <el-date-picker style="width: 200px;" clearable v-model="query.endDate"  type="date" placeholder="选择截止日期" ></el-date-picker>
-        </el-col>
-      </el-row>
+             <el-form-item label="合同号:">
+                <el-input v-model="query.contNo" clearable placeholder="请输入合同号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
+             </el-form-item>
+           </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
+           <el-form-item label="开始时间:">
+            <el-date-picker clearable style="width: 200px;" v-model="query.startDate"  type="date" placeholder="选择开始日期"></el-date-picker>
+           </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
+            <el-form-item label="结束时间:">
+              <el-date-picker style="width: 200px;" clearable v-model="query.endDate"  type="date" placeholder="选择截止日期" ></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
       <el-row :gutter="20">
         <el-col  :offset="20">
-          <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
+          <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="doQuery">搜索</el-button>
           <el-button  class="filter-item" size="mini" type="primary" icon="el-icon-refresh-left" @click="reset">重置</el-button>
         </el-col>
       </el-row>
@@ -103,7 +109,12 @@ export default {
       drawweList:[],//受票人集合
       vertifys:[],//保存选中的那个id
       multipleSelection: [],
-      vertifyLoading:false
+      vertifyLoading:false,
+      rules: {
+        drawwe: [
+          { required: true, message: '请选择受票人', trigger: 'change' }
+        ],
+      }
     }
   },
   created() {
@@ -117,6 +128,14 @@ export default {
       },
   methods: {
     parseTime,
+    //搜索查询验证
+    doQuery() {
+      this.$refs['query'].validate((valid) => {
+        if (valid) {
+          this.toQuery()
+        }
+      })
+    },
     beforeInit() {
       this.url = 'api/findLnvoiceContract'
       const query = this.query
@@ -142,7 +161,7 @@ export default {
       this.$set(this.query,'contNo','')
       this.$set(this.query,'startDate',null)
       this.$set(this.query,'endDate',null)
-       this.init()
+      this.init()
     },
    //批量操作
    handleSelectionChange(val) {
@@ -171,8 +190,8 @@ export default {
        }
        else{
           const _this = this.$refs.form
+          this.$refs.form.contractId = this.vertifys[0].id
           _this.form = {
-            contractId : this.vertifys[0].id,
             drawwe: this.vertifys[0].drawwe,
             lnvoiceMoney: this.vertifys[0].contCost,
             contCost: this.vertifys[0].contCost,

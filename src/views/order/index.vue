@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <!--工具栏-->
+    <applicationForm ref="applicationForm" />
     <div class="head-container demo-input-suffix">
       <el-row>
          <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6" class="filter-item">
@@ -23,7 +24,7 @@
           </el-select>
          </el-col>
          <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6"  class="filter-item">
-           <span class="label">车牌号:   </span>
+           <span class="label">车牌号:</span>
            <el-input v-model="query.headLicense" clearable placeholder="请输入车牌号码" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery"/>
          </el-col>
       </el-row>
@@ -36,7 +37,7 @@
             <span class="label"> 结束时间:  </span>
             <el-date-picker style="width: 200px;" clearable v-model="query.endDate" type="date" placeholder="选择截止日期" ></el-date-picker>
           </el-col>
-         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6"  >
+         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6"  class="filter-item">
              <span class="label">合同状态: </span>
            <el-select v-model="query.consignmentStatus"  clearable placeholder="请输入合同状态"  @keyup.enter.native="toQuery">
                <el-option
@@ -47,6 +48,14 @@
                </el-option>
            </el-select>
          </el-col>
+          <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" class="filter-item">
+            <span class="label">申请单状态:</span>
+            <el-select v-model="query.lnvoiceStatus" clearable filterable placeholder="请选择申请单状态" style="width: 200px;"
+              @keyup.enter.native="toQuery">
+              <el-option v-for="item in lnvoiceStatusList" :key="item.id" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
       </el-row>
     </div>
     <el-row :gutter="20">
@@ -70,43 +79,25 @@
    <!-- <order ref="order":data="data" :loading="loading"></order> -->
      <el-table height="500" @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection"/>
-      <el-table-column label="合同号" prop="contractNo" width="100" align="center"/>
-      <el-table-column  prop="contractStatus" label="合同状态"/>
-      <el-table-column prop="contractDate" label="合同时间" width="100" sortable>
+      <el-table-column label="操作" width="100" align="center">
+        <template slot-scope="scope">
+          <el-button slot="reference" type="danger" @click="definite(scope.row)" size="mini">申请明细</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="合同号" prop="contractNo" align="center"/>
+      <el-table-column  prop="contractStatus" label="合同状态" />
+      <el-table-column prop="contractDate" label="合同时间" sortable>
         <template slot-scope="scope">
           <span>{{scope.row.contractDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column  prop="lotNo" label="运输清单号" width="150" align="center"/>
-      <el-table-column  prop="systemOrderId" label="托运单号" width="150" align="center"/>
-      <el-table-column  prop="consignmentStatus" label="托运单状态" width="100"/>
-      <el-table-column prop="createDate" label="运单创建日期" width="120" sortable>
+      <el-table-column  prop="contractCost" label="合同金额" />
+      <el-table-column  prop="drawwe" label="受票人" />
+       <el-table-column prop="lnvoiceStatus" label="申请单状态" sortable>
         <template slot-scope="scope">
-          <span>{{ scope.row.createDate==null?null:parseTime(scope.row.createDate) }}</span>
+          <span>{{parseStatus(scope.row.lnvoiceStatus)}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="orderDate" label="下单时间" width="100" sortable>
-        <template slot-scope="scope">
-          <span>{{ scope.row.orderDate==null?null:parseTime(scope.row.orderDate) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column  prop="shipperName" label="发货单位" width="150" align="center"/>
-      <el-table-column  prop="consigneeName" label="收货单位" width="150" align="center"/>
-      <el-table-column  prop="cargoName" label="货物名称"  width="100"/>
-      <el-table-column  prop="cargoCount" label="件数"/>
-      <el-table-column  prop="departStation" label="起站" width="100"/>
-      <el-table-column  prop="arriveStation" label="到站" width="100"/>
-      <el-table-column  prop="headLicense" label="车辆信息" width="100"/>
-      <el-table-column  prop="driverName" label="司机信息" width="100"/>
-      <el-table-column prop="departDate" label="发车时间" width="100" sortable>
-        <template slot-scope="scope">
-          <span>{{ scope.row.orderDate==null?null:parseTime(scope.row.departDate)  }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="insureResult" label="投保结果"/>
-      <el-table-column prop="insureReasons" label="失败原因"/>
-      <el-table-column prop="insureMoney" label="确认金额"/>
-      <el-table-column prop="confirmationAmount" label="投保金额"/>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -122,14 +113,17 @@
 <script>
 import order from '@/views/components/orderList'
 import initData from '@/mixins/initData'
-import { parseTime } from '@/utils/index'
+import { parseTime, number_format, parseStatus } from '@/utils/index'
 import { findByOrder,findByconsigneeName } from '@/api/order'
+import {lnvoiceCommonList} from '@/utils/common'
+import applicationForm from './applicationForm'
 
 export default {
   mixins: [initData],
-  components:{order},
+  components:{order,applicationForm},
   data() {
     return {
+      lnvoiceStatusList: lnvoiceCommonList, //保存申请单状态集合
       orderList:[],//保存选中的集合
       downloadLoading:false,//加载中
       multipleSelection: [],
@@ -153,6 +147,15 @@ export default {
       },
   methods: {
     parseTime,
+    parseStatus,
+    number_format,
+    //申请明细
+    definite(data) {
+      const _this = this.$refs.applicationForm
+      _this.contractId = data.id
+      _this.init()
+      _this.dialog = true
+    },
     beforeInit() {
       this.url = 'api/findByOrder'
       const query = this.query
@@ -163,6 +166,8 @@ export default {
       const endDate = query.endDate
       const headLicense = query.headLicense
       const consignmentStatus = query.consignmentStatus
+      const lnvoiceStatus = query.lnvoiceStatus
+
       this.params = { page: this.page, size: this.size }
      if (contractNo) { this.params['contractNo'] = contractNo }
      if (lotNo) { this.params['lotNo'] = lotNo }
@@ -170,6 +175,7 @@ export default {
      if (startDate) { this.params['startDate'] = parseTime(startDate) }
      if (endDate) { this.params['endDate'] = parseTime(endDate) }
      if (headLicense) { this.params['headLicense'] = headLicense }
+     if (lnvoiceStatus) { this.params['lnvoiceStatus'] = lnvoiceStatus }
      if (consignmentStatus) { this.params['consignmentStatus'] = consignmentStatus }
       return true
     },

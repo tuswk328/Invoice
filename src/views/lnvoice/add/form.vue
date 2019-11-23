@@ -43,8 +43,8 @@ export default {
       dialog: false,
       depts: [],
       carrierList:[],//查询承运方集合
+      contractId:[],//保存成协的合同id
       form: {
-        contractId:'',//保存成协的合同id
         bindingContractId:'',//绑定的合同id
         drawwe: '',
         carrier:'',
@@ -72,7 +72,7 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true
-          saveLnvoiceOrder(this.form.contractId,this.form.bindingContractId,this.form.lnvoiceMoney).then(res => {
+          saveLnvoiceOrder(this.contractId,this.form.bindingContractId,this.form.lnvoiceMoney).then(res => {
             this.resetForm()
             this.$notify({
               title: '开票成功',
