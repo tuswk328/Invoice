@@ -15,7 +15,7 @@
         <!--工具栏-->
         <div class="head-container">
           <!-- 搜索 -->
-          <el-input v-model="query.blurry" clearable placeholder="输入名称或者邮箱搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery"/>
+          <el-input v-model="query.userName" clearable placeholder="输入名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery"/>
           <el-select v-model="query.enabled" clearable placeholder="状态" class="filter-item" style="width: 90px" @change="toQuery">
             <el-option v-for="item in enabledTypeOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
           </el-select>
@@ -51,7 +51,7 @@
             <template slot-scope="scope">
               <div>{{ scope.row.dept.name }} / {{ scope.row.job.name }}</div>
             </template>
-          </el-table-column> 
+          </el-table-column>
            <el-table-column label="岗位">
             <template slot-scope="scope">
               <div>{{ scope.row.job.name }}</div>
@@ -148,10 +148,10 @@ export default {
       this.url = 'api/users'
       const sort = 'id,desc'
       const query = this.query
-      const blurry = query.blurry
+      const userName = query.userName
       const enabled = query.enabled
       this.params = { page: this.page, size: this.size, sort: sort, deptId: this.deptId }
-      if (blurry) { this.params['blurry'] = blurry }
+      if (userName) { this.params['userName'] = userName }
       if (enabled !== '' && enabled !== null) { this.params['enabled'] = enabled }
       return true
     },
@@ -228,6 +228,9 @@ export default {
       _this.form = { id: data.id, username: data.username, phone: data.phone,nickName:data.nickName, email: data.email, enabled: data.enabled.toString(), roles: [], dept: { id: data.dept.id }, job: { id: data.job.id }}
       data.roles.forEach(function(data, index) {
         _this.roleIds.push(data.id)
+      })
+      data.deptsAuthority.forEach(function(data, index) {
+        _this.deptIds.push(data.id)
       })
       _this.deptId = data.dept.id
       _this.jobId = data.job.id

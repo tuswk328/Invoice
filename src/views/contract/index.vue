@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!--表单组件-->
-    <eForm ref="form" :isAdd="isAdd" :dictMap="dictMap"/>
+    <eForm ref="form" :isAdd="isAdd" />
     <el-row :gutter="24">
       <el-col>
     <!--工具栏-->
@@ -11,7 +11,7 @@
              <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
                <span class="label">合同号:</span>
                <el-input v-model="query.contractNum" clearable placeholder="请输入合同号" style="width: 200px;" @keyup.enter.native="toQuery"/>
-             </el-col>             
+             </el-col>
              <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8"  class="filter-item">
                <span class="label">受票人:</span>
               <el-select filterable  v-model="query.drawwe" clearable placeholder="请选择受票人" >
@@ -150,6 +150,7 @@ export default {
   mixins: [initData,initDict],
   data() {
     return {
+      userId:'',      //用户id
       tableHeight:300,//表格高度
       contractList:[],//保存已勾选的合同集合
       drawweList:[],//受票人集合
@@ -162,8 +163,10 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-      this.init()
-      this.getDictMap('carrier')
+      store.dispatch('GetInfo').then(res => {
+        this.userId=res.id
+        this.init()
+      })
       this.getBindingContractByDrawwe()
     })
   },
@@ -192,7 +195,7 @@ export default {
       const drawwe = query.drawwe
       const startDate = query.startDate
       const endDate = query.endDate
-      this.params = { page: this.page, size: this.size, sort: sort}
+      this.params = { page: this.page, size: this.size, sort: sort ,userId:this.userId}
       //最高级别查询所有数据
 	    if (contractNum) { this.params['contractNum'] = contractNum }
       if (drawwe) { this.params['drawwe'] = drawwe }

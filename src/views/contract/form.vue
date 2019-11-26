@@ -23,9 +23,9 @@
         <el-col :span="12">
           <el-form-item label="乙方" prop="carrierId" label-width="120px">
            <el-select :disabled="isAdd" v-model="form.carrierId"  placeholder="请选择承运方" style="width: 170px;">
-             <el-option  v-for="(item, index) in dictMap.carrier"
+             <el-option  v-for="(item, index) in carrierList"
                :key="item.index"
-               :label="item.label"
+               :label="item.name"
                :value="item.id"
                />
            </el-select>
@@ -126,6 +126,7 @@
 
 <script>
 import { add,upload ,edit} from '@/api/bindingContract'
+import { gerDeptScope} from '@/api/dept'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 export default {
@@ -133,16 +134,14 @@ export default {
     isAdd: {
       type: Boolean,
       required: true
-    },
-    dictMap: {
-      type: Object,
-      required: true
     }
   },
   created() {
+    this.getCarrier()
   },
   data() {
     return {
+      carrierList:[],//承运方集合
       pickerOptions0: {
           disabledDate: (time) => {
               if (this.form.endDate != null) {
@@ -179,7 +178,8 @@ export default {
         contractImage: '',
         contractYear:'',
         contractStatusId:18,
-        creator:''
+        creator:'',
+        deptId:''
       },
       rules: {//表达验证
         identificationNumber: [
@@ -226,6 +226,7 @@ export default {
     doAdd() {
      store.dispatch('GetInfo').then(res => {
          this.form.creator = res.id
+         this.form.deptId = res.deptId
          add(this.form).then(res => {
            this.resetForm()
             this.clearFile()
@@ -341,6 +342,13 @@ export default {
         this.imageFrontUrl = null;
         this.form.fileName = '';
         this.imageFrontFile = '';
+    },
+    getCarrier(){
+      //查询承运方
+        gerDeptScope().then(res => {
+          this.carrierList=res
+        }).catch(err => {
+        })
     },
   }
 }
