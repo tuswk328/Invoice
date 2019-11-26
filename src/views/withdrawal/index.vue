@@ -69,15 +69,15 @@
           <span>{{ parseTime(scope.row.operationDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="operationComments" label="运营审核意见" width="100" />
+      <el-table-column prop="operationComments" label="运营审核意见" width="150" />
       <el-table-column prop="financialName" label="财务审核人" width="100" />
       <el-table-column prop="financialDate" label="财务审核时间" width="130" sortable>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.financialDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="financialComments" label="财务审核意见" width="100" />
-      <el-table-column prop="lnvoiceNumber" label="发票号码" width="150" />
+      <el-table-column prop="financialComments" label="财务审核意见" width="150" />
+      <el-table-column prop="lnvoiceNumber" label="发票号码" width="170" />
     </el-table>
     <!--分页组件-->
     <el-pagination :total="total" :current-page="page + 1" style="margin-top: 8px;" layout="total, prev, pager, next, sizes"
