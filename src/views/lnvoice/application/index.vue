@@ -151,7 +151,7 @@
           <span>{{ parseTime(scope.row.operationDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="operationComments" label="运营审核意见" width="110">
+      <el-table-column prop="operationComments" label="运营审核意见" width="150">
         <template slot-scope="scope">
            <el-tooltip class="item" effect="light" :content="scope.row.operationComments" placement="bottom-start">
               <span>{{ scope.row.operationComments==null?null:scope.row.operationComments.substring(0,10) }}</span>
@@ -164,14 +164,14 @@
           <span>{{ parseTime(scope.row.financialDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="financialComments" label="财务审核意见" width="100">
+      <el-table-column prop="financialComments" label="财务审核意见" width="150">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="light" :content="scope.row.financialComments" placement="bottom-start">
             <span>{{ scope.row.financialComments==null?null:scope.row.financialComments.substring(0,10) }}</span>
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column prop="lnvoiceNumber" label="发票号码" width="110" />
+      <el-table-column prop="lnvoiceNumber" label="发票号码" width="170" />
     </el-table>
     <!--分页组件-->
     <el-pagination

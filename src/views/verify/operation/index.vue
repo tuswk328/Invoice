@@ -54,7 +54,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="lnvoiceOrder" label="申清单号" width="160" align="center" sortable/>
-      <el-table-column prop="lnvoiceStatus" label="申请单状态" width="150" sortable>
+      <el-table-column prop="lnvoiceStatus" label="申请单状态" width="130" align="center" sortable>
         <template slot-scope="scope">
           <span>{{parseStatus(scope.row.lnvoiceStatus)}}</span>
         </template>
@@ -73,12 +73,12 @@
         </template>
       </el-table-column>
       <el-table-column prop="operationName" label="运营审核人" width="100" />
-      <el-table-column prop="operationDate" label="运营审核时间" width="150" sortable>
+      <el-table-column prop="operationDate" label="运营审核时间" width="120" sortable>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.operationDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="operationComments" label="运营审核意见" width="100">
+      <el-table-column prop="operationComments" label="运营审核意见" width="150">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="light" :content="scope.row.operationComments" placement="bottom-start">
             <span>{{ scope.row.operationComments==null?null:scope.row.operationComments.substring(0,10) }}</span>
@@ -91,14 +91,14 @@
           <span>{{ parseTime(scope.row.financialDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="financialComments" label="财务审核意见" width="100">
+      <el-table-column prop="financialComments" label="财务审核意见" width="150">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="light" :content="scope.row.financialComments" placement="bottom-start">
             <span>{{ scope.row.financialComments==null?null:scope.row.financialComments.substring(0,10) }}</span>
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column prop="lnvoiceNumber" label="发票号码" width="150" />
+      <el-table-column prop="lnvoiceNumber" label="发票号码" width="170" />
     </el-table>
     <!--分页组件-->
     <el-pagination :total="total" :current-page="page + 1" style="margin-top: 8px;" layout="total, prev, pager, next, sizes"
