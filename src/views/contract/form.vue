@@ -126,7 +126,6 @@
 
 <script>
 import { add,upload ,edit} from '@/api/bindingContract'
-import { gerDeptScope} from '@/api/dept'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 export default {
@@ -134,14 +133,17 @@ export default {
     isAdd: {
       type: Boolean,
       required: true
+    },
+    carrierList: {
+      type: Array,
+      required: true
     }
   },
   created() {
-    this.getCarrier()
   },
   data() {
     return {
-      carrierList:[],//承运方集合
+
       pickerOptions0: {
           disabledDate: (time) => {
               if (this.form.endDate != null) {
@@ -342,13 +344,6 @@ export default {
         this.imageFrontUrl = null;
         this.form.fileName = '';
         this.imageFrontFile = '';
-    },
-    getCarrier(){
-      //查询承运方
-        gerDeptScope().then(res => {
-          this.carrierList=res
-        }).catch(err => {
-        })
     },
   }
 }

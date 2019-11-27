@@ -75,9 +75,9 @@
             style="width: 200px;"
           >
             <el-option
-              v-for="item in dictMap.carrier"
+              v-for="item in carrierList"
               :key="item.value"
-              :label="item.label"
+              :label="item.name"
               :value="item.id"
             ></el-option>
           </el-select>
@@ -187,17 +187,18 @@
 
 <script>
 import initData from "@/mixins/initData";
-import initDict from "@/mixins/initDict";
 import { parseTime, number_format, parseStatus } from "@/utils/index";
 import { getBindingContractByDrawwe } from "@/api/bindingContract.js";
 import applicationForm from "./applicationForm";
+import {gerDeptScope} from '@/api/dept'
 export default {
-  mixins: [initData, initDict],
+  mixins: [initData],
   components: {
     applicationForm
   },
   data() {
     return {
+      carrierList:[],//承运方集合
       drawweList: [], //受票人集合
       lvnoiceOrderList: [], //保存开票订单集合
       multipleSelection: [],
@@ -207,7 +208,7 @@ export default {
   created() {
     this.$nextTick(() => {
       this.init();
-      this.getDictMap("carrier");
+      this.getCarrier()
       this.getBindingContractByDrawwe(); //查询受票人
     });
   },
@@ -262,9 +263,16 @@ export default {
     getBindingContractByDrawwe() {
       getBindingContractByDrawwe()
         .then(res => {
-          this.drawweList = res;
+          this.drawweList = res
+        }).catch(err => {
         })
-        .catch(err => {});
+    },
+    getCarrier(){
+        //查询承运方
+         gerDeptScope().then(res => {
+           this.carrierList=res
+         }).catch(err => {
+         })
     },
     // 导出
     download() {
