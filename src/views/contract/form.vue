@@ -90,8 +90,9 @@
       <el-divider content-position="left">合同附件</el-divider>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="文件名" >
+          <el-form-item label="文件" >
           <el-upload
+          :disabled="isAdd"
             class="avatar-uploader"
             v-show="imageFrontUrl == null"
             name="upfile"
@@ -102,7 +103,7 @@
             :before-upload="beforeUpload"
             multiple>
             <i class="el-icon-upload"></i>
-            <div class="el-upload__text">
+            <div class="el-upload__text" >
             <p v-if="imageFrontFile != null">文件名称: {{ imageFrontFile.name }}</p>
             <p v-else>点击或拖拽文件上传</p></div>
           </el-upload>
@@ -111,7 +112,7 @@
               </a>{{ imageFrontFile.name }}&nbsp;&nbsp;<i class="el-icon-circle-check" style="color: green;">
               </i>
               <!-- <img class="avatar" :src="imageFrontUrl" /> -->
-              <el-button outline  @click="clearFile">清除</el-button>
+              <el-button outline  @click="clearFile"  v-if="!isAdd">清除</el-button>
              </div>
           </el-form-item>
         </el-col>

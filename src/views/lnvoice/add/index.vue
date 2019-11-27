@@ -19,7 +19,7 @@
                 </el-form-item>
            </el-col>
            <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
-           <el-form-item label="承运方:" >
+           <el-form-item label="承运方:"  prop="carrier">
              <el-select filterable  v-model="query.carrier"  clearable placeholder="请输入承运方"  @keyup.enter.native="toQuery" style="width: 200px;">
                  <el-option
                    v-for="item in carrierList"
@@ -31,36 +31,35 @@
            </el-form-item>
            </el-col>
            <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" class="filter-item">
-             <el-form-item label="合同号:">
+             <el-form-item label="合同号:" prop="contNo">
                 <el-input v-model="query.contNo" clearable placeholder="请输入合同号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
              </el-form-item>
            </el-col>
             <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
-           <el-form-item label="开始时间:">
+           <el-form-item label="开始时间:" prop="startDate">
             <el-date-picker clearable style="width: 200px;" v-model="query.startDate"  type="date" placeholder="选择开始日期"></el-date-picker>
            </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
-            <el-form-item label="结束时间:">
+            <el-form-item label="结束时间:" prop="endDate">
               <el-date-picker style="width: 200px;" clearable v-model="query.endDate"  type="date" placeholder="选择截止日期" ></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
-        <!-- <el-row>
-      
-        </el-row> -->
+        <el-row :gutter="20">
+          <el-col  :offset="18">
+            <el-form-item >
+              <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="doQuery">搜索</el-button>
+              <el-button  class="filter-item" size="mini" type="primary" icon="el-icon-refresh-left" @click="reset('query')">重置</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
-      <el-row :gutter="20">
-        <el-col  :offset="20">
-          <el-button  class="filter-item" size="mini" type="success" icon="el-icon-search" @click="doQuery">搜索</el-button>
-          <el-button  class="filter-item" size="mini" type="primary" icon="el-icon-refresh-left" @click="reset">重置</el-button>
-        </el-col>
-      </el-row>
       <!-- 审核 -->
         <!-- v-permission="['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_VERTIFY']" -->
       <div style="display: inline-block;margin: 0px 2px;">
         <el-button
-        
+
           class="filter-item"
           :loading="vertifyLoading"
           size="mini"
@@ -160,13 +159,13 @@ export default {
     cancel() {
       this.resetForm()
     },
-    reset(){
-      this.$set(this.query,'carrier','')
-      this.$set(this.query,'drawwe','')
-      this.$set(this.query,'contNo','')
-      this.$set(this.query,'startDate',null)
-      this.$set(this.query,'endDate',null)
-      this.init()
+    reset(formName){
+      this.$set(this.query, 'contNo', '')
+      this.$set(this.query, 'drawwe', '')
+      this.$set(this.query, 'carrier', '')
+      this.$set(this.query, 'startDate', null)
+      this.$set(this.query, 'endDate', null)
+      this.$refs[formName].clearValidate();
     },
    //批量操作
    handleSelectionChange(val) {
