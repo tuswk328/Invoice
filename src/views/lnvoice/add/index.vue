@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!--表单组件-->
-    <eForm ref="form" />
+    <eForm ref="form"/>
     <!--工具栏-->
     <div class="head-container demo-input-suffix">
       <el-form ref="query" :rules="rules" :model="query" label-width="100px" >
@@ -22,9 +22,9 @@
            <el-form-item label="承运方:" >
              <el-select filterable  v-model="query.carrier"  clearable placeholder="请输入承运方"  @keyup.enter.native="toQuery" style="width: 200px;">
                  <el-option
-                   v-for="item in dictMap.carrier"
+                   v-for="item in carrierList"
                    :key="item.value"
-                   :label="item.label"
+                   :label="item.name"
                    :value="item.id" >
                  </el-option>
              </el-select>
@@ -97,17 +97,20 @@
 
 <script>
 import initData from '@/mixins/initData'
-import initDict from '@/mixins/initDict'
 import eForm from './form'
+import { gerDeptScope} from '@/api/dept'
 import { parseTime } from '@/utils/index'
+import store from '@/store'
 import { findLnvoiceContract,findBySaveLnvoice } from '@/api/lnvoice'
 import { findByDrawweAndConDate,getBindingContractByDrawwe } from '@/api/bindingContract.js'
 
 export default {
   components: { eForm },
-  mixins: [initData,initDict],
+  mixins: [initData],
   data() {
     return {
+      userId:'',
+      carrierList:[],//承运方集合
       drawweList:[],//受票人集合
       vertifys:[],//保存选中的那个id
       multipleSelection: [],
@@ -121,9 +124,9 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-      this.loading=false
-      this.getDictMap('carrier')
-     this.getBindingContractByDrawwe()//查询收货单位
+        this.loading=false
+        this.getBindingContractByDrawwe()
+        this.getCarrier()
     })
   },
   mounted() {
@@ -209,11 +212,17 @@ export default {
      },
      //查询受票人
       getBindingContractByDrawwe(){
-          getBindingContractByDrawwe().then(res => {
-            this.drawweList=res
-          }).catch(err => {
-
-          })
+      getBindingContractByDrawwe().then(res => {
+        this.drawweList=res
+      }).catch(err => {
+      })
+      },
+      getCarrier(){
+      //查询承运方
+       gerDeptScope().then(res => {
+         this.carrierList=res
+       }).catch(err => {
+       })
       },
 
   }
