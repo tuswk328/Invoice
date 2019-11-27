@@ -2,9 +2,9 @@
   <div >
     <el-table  @selection-change="handleSelectionChange" :v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection"/>
-      <el-table-column label="合同号" prop="contractNo" width="100" />
+      <el-table-column label="合同号" prop="contractNo" width="150" />
       <el-table-column  prop="contractStatus" label="合同状态"/>
-      <el-table-column prop="contractDate" label="合同时间" width="100">
+      <el-table-column prop="contractDate" label="合同时间" width="120">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.contractDate) }}</span>
         </template>
@@ -28,9 +28,9 @@
       <el-table-column  prop="cargoCount" label="件数"/>
       <el-table-column  prop="departStation" label="起站" width="100"/>
       <el-table-column  prop="arriveStation" label="到站" width="100"/>
-      <el-table-column  prop="headLicense" label="车辆信息" width="100"/>
+      <el-table-column  prop="headLicense" label="车辆信息" width="150"/>
       <el-table-column  prop="driverName" label="司机信息" width="100"/>
-      <el-table-column prop="departDate" label="发车时间" width="100">
+      <el-table-column prop="departDate" label="发车时间" width="120">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.departDate) }}</span>
         </template>

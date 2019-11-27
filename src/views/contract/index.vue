@@ -53,9 +53,10 @@
             </el-row>
 
       <!-- 新增 -->
+        <!-- v-permission="['ADMIN','CONTRACT_ALL','CONTRACT_CREATE']" -->
       <div style="display: inline-block;margin: 0px 2px;">
         <el-button
-          v-permission="['ADMIN','CONTRACT_ALL','CONTRACT_CREATE']"
+        
           class="filter-item"
           size="mini"
           type="primary"
@@ -63,9 +64,10 @@
           @click="add">新增</el-button>
       </div>
       <!-- 作废 -->
+       <!-- v-permission="['ADMIN','RENTCONTRACT_ALL','RENTCONTRACT_CANCEL']" -->
       <div style="display: inline-block;margin: 0px 2px;">
         <el-button
-          v-permission="['ADMIN','RENTCONTRACT_ALL','RENTCONTRACT_CANCEL']"
+         
           class="filter-item"
           size="mini"
           type="danger"
@@ -73,9 +75,10 @@
           @click="cancel">作废</el-button>
       </div>
       <!-- 导出 -->
+          <!-- v-permission="['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EXPORT']" -->
       <div style="display: inline-block;">
         <el-button
-          v-permission="['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EXPORT']"
+      
           :loading="downloadLoading"
           size="mini"
           class="filter-item"

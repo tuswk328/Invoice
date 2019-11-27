@@ -65,9 +65,10 @@
       </el-col>
     </el-row>
     <!-- 导出 -->
+      <!-- v-permission="['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EXPORT']" -->
     <div style="display: inline-block;">
       <el-button
-        v-permission="['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EXPORT']"
+      
         :loading="downloadLoading"
         size="mini"
         class="filter-item"

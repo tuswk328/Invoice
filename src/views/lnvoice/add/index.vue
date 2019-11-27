@@ -3,8 +3,8 @@
     <!--表单组件-->
     <eForm ref="form" />
     <!--工具栏-->
-    <div class="head-container">
-      <el-form ref="query" :rules="rules" :model="query" label-width="100px">
+    <div class="head-container demo-input-suffix">
+      <el-form ref="query" :rules="rules" :model="query" label-width="100px" >
         <el-row>
            <el-col  :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
                <el-form-item label="受票人:" prop="drawwe">
@@ -35,9 +35,7 @@
                 <el-input v-model="query.contNo" clearable placeholder="请输入合同号" style="width: 200px;"  @keyup.enter.native="toQuery"/>
              </el-form-item>
            </el-col>
-        </el-row>
-        <el-row>
-          <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
+            <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"  class="filter-item">
            <el-form-item label="开始时间:">
             <el-date-picker clearable style="width: 200px;" v-model="query.startDate"  type="date" placeholder="选择开始日期"></el-date-picker>
            </el-form-item>
@@ -48,6 +46,9 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!-- <el-row>
+      
+        </el-row> -->
       </el-form>
       <el-row :gutter="20">
         <el-col  :offset="20">
@@ -56,9 +57,10 @@
         </el-col>
       </el-row>
       <!-- 审核 -->
+        <!-- v-permission="['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_VERTIFY']" -->
       <div style="display: inline-block;margin: 0px 2px;">
         <el-button
-          v-permission="['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_VERTIFY']"
+        
           class="filter-item"
           :loading="vertifyLoading"
           size="mini"
@@ -223,5 +225,8 @@ export default {
   display: inline-block;
   width: 80px;
   text-align: right;
+}
+.ff{
+  height: 10px;
 }
 </style>
