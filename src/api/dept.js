@@ -8,6 +8,13 @@ export function getDepts(params) {
   })
 }
 
+export function gerDeptScope() {
+  return request({
+    url: 'api/gerDeptScope',
+    method: 'get',
+  })
+}
+
 export function add(data) {
   return request({
     url: 'api/dept',
