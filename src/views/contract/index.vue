@@ -67,7 +67,7 @@
           <el-table height="500" @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small"
             style="width: 100%;">
             <el-table-column width="55" type="selection" />
-            <el-table-column label="合同编号" align="center">
+            <el-table-column label="合同编号" align="center" width="150">
               <template slot-scope="scope">
                 <a style="font-weight: 700;" @click="edit(scope.row)">{{scope.row.contractNo}}</a>
               </template>
@@ -78,7 +78,7 @@
                 <span>{{ parseTime(scope.row.createDate) }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="contractNum" label="合同号" />
+            <el-table-column prop="contractNum" label="合同号" width="150"/>
             <el-table-column prop="identificationNumber" label="纳税人识别号" />
             <el-table-column prop="drawwe" label="客户名称" />
             <el-table-column prop="carrierName" label="承运方" />
