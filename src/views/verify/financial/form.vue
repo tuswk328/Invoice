@@ -70,7 +70,8 @@
             <el-col :span="12">
               <el-form-item label="审核" label-width="100px" prop="newlnvoiceStatus">
                 <el-select v-model="form.newlnvoiceStatus" clearable filterable placeholder="请选择申请单状态" style="width: 200px;">
-                  <el-option v-for="item in lnvoiceStatusList" :key="item.id" :label="item.label" :value="item.value">
+                  <el-option v-for="item in lnvoiceStatusList" :key="item.id" :label="item.label" :value="item.value"
+                  @change="selectOne">
                   </el-option>
                 </el-select>
               </el-form-item>
