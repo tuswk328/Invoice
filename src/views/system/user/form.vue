@@ -26,7 +26,7 @@
       </el-form-item>
       <el-form-item style="margin-bottom: 0px;" label="角色">
         <el-select v-model="roleIds"  multiple placeholder="请选择">
-          <el-option v-for="(item, index) in roles"  :key="item.name + index"
+          <el-option v-for="(item, index) in roles" :disabled="level !== 1 && item.level <= level" :key="item.name + index"
             :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
