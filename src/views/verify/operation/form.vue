@@ -67,8 +67,8 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="审核" label-width="100px" prop="newlnvoiceStatus">
-                <el-select v-model="form.newlnvoiceStatus" clearable filterable placeholder="请选择申请单状态" style="width: 200px;">
-                  <el-option v-for="item in lnvoiceStatusList" :key="item.id" :label="item.label" :value="item.value">
+                <el-select  @change="selectOne" value-key="value"  v-model="form.newlnvoiceStatus" clearable filterable placeholder="请选择申请单状态" style="width: 200px;">
+                  <el-option v-for="item in lnvoiceStatusList" :key="item.id" :label="item.label" :value="item">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -168,6 +168,10 @@
       parseStatus,
       number_format,
       parseTime,
+      selectOne(item) {     //change 触发事件
+      
+         this.form.operationComments = item.label
+        },
       beforeInit() {
         this.url = 'api/findByAuditLog/' + this.lnvoiceId
         const query = this.query
@@ -199,7 +203,7 @@
         store.dispatch('GetInfo').then(res => {
           this.form.creator = res.id
           this.form.operationUser = res.id
-          operationVerify(this.form, this.form.newlnvoiceStatus).then(res => {
+          operationVerify(this.form, this.form.newlnvoiceStatus.value).then(res => {
             this.$notify({
               title: '操作成功',
               type: 'success',
