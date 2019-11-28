@@ -15,6 +15,15 @@ export function findByconsigneeName() {
 }
 
 
+export function download(ids) {
+  return request({
+    url: 'api/download?ids='+ids,
+    method: 'get',
+    ids
+  })
+}
+
+
 
 
 export function getBindingContractByDrawwe() {

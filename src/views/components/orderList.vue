@@ -24,6 +24,7 @@
       </el-table-column>
       <el-table-column  prop="shipperName" label="发货单位" width="150"/>
       <el-table-column  prop="consigneeName" label="收货单位" width="150"/>
+      <el-table-column  prop="consigneePhone" label="收货人联系手机" width="150"/>
       <el-table-column  prop="cargoName" label="货物名称"  width="100"/>
       <el-table-column  prop="cargoCount" label="件数"/>
       <el-table-column  prop="departStation" label="起站" width="100"/>

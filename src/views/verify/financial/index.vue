@@ -56,7 +56,8 @@
       <el-button size="mini" class="filter-item" type="danger" @click="withdrawal">确认撤回</el-button>
     </div> -->
     <!--表格渲染-->
-    <el-table @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
+    <el-table :summary-method="getSummaries"
+    show-summary @selection-change="handleSelectionChange" v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection" />
       <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
@@ -373,9 +374,36 @@
             })
 
           }).catch(action => {});
-
         }
-      }
+      },
+      //数据金额
+       getSummaries(param) {
+              const { columns, data } = param;
+              const sums = [];
+              columns.forEach((column, index) => {
+                if (index === 0) {
+                  sums[index] = '总价';
+                  return;
+                }
+               else if (index === 6) {
+                  const values = data.map(item => Number(item[column.property]));
+                  if (!values.every(value => isNaN(value))) {
+                    sums[index] = values.reduce((prev, curr) => {
+                      const value = Number(curr);
+                      if (!isNaN(value)) {
+                        return prev + curr;
+                      } else {
+                        return prev;
+                      }
+                    }, 0);
+                    sums[index] += ' 元';
+                  } else {
+                    sums[index] = 'N/A';
+                  }
+                }
+              });
+              return sums;
+            }
     }
   }
 </script>

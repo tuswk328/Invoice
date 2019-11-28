@@ -225,7 +225,7 @@
           //审核
           if(!this.isverify){
              if(this.form.lnvoiceStatus==2){
-               financialVerify(this.form, this.form.newlnvoiceStatus).then(res => {
+               financialVerify(this.form, this.form.newlnvoiceStatus.value).then(res => {
                  this.$notify({
                    title: '操作成功',
                    type: 'success',

@@ -41,7 +41,8 @@
         @click="download">导出</el-button>
     </div>
     <!--表格渲染-->
-    <el-table height="500"  @selection-change="handleSelectionChange" v-loading="loading"
+    <el-table :summary-method="getSummaries"
+    show-summary  @selection-change="handleSelectionChange" v-loading="loading"
       :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection" />
       <el-table-column label="操作" width="220" align="center">
@@ -257,6 +258,34 @@
         _this.init()
         _this.dialog = true
       },
+      //数据金额
+       getSummaries(param) {
+              const { columns, data } = param;
+              const sums = [];
+              columns.forEach((column, index) => {
+                if (index === 0) {
+                  sums[index] = '总价';
+                  return;
+                }
+               else if (index === 6) {
+                  const values = data.map(item => Number(item[column.property]));
+                  if (!values.every(value => isNaN(value))) {
+                    sums[index] = values.reduce((prev, curr) => {
+                      const value = Number(curr);
+                      if (!isNaN(value)) {
+                        return prev + curr;
+                      } else {
+                        return prev;
+                      }
+                    }, 0);
+                    sums[index] += ' 元';
+                  } else {
+                    sums[index] = 'N/A';
+                  }
+                }
+              });
+              return sums;
+            }
     }
   }
 </script>

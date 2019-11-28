@@ -68,7 +68,7 @@
       <!-- v-permission="['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EXPORT']" -->
     <div style="display: inline-block;">
       <el-button
-      
+
         :loading="downloadLoading"
         size="mini"
         class="filter-item"
@@ -115,7 +115,7 @@
 import order from '@/views/components/orderList'
 import initData from '@/mixins/initData'
 import { parseTime, number_format, parseStatus } from '@/utils/index'
-import { findByOrder,findByconsigneeName } from '@/api/order'
+import { findByOrder,findByconsigneeName,download } from '@/api/order'
 import {lnvoiceCommonList} from '@/utils/common'
 import applicationForm from './applicationForm'
 
@@ -124,6 +124,7 @@ export default {
   components:{order,applicationForm},
   data() {
     return {
+      contractDownloadList:[],
       lnvoiceStatusList: lnvoiceCommonList, //保存申请单状态集合
       orderList:[],//保存选中的集合
       downloadLoading:false,//加载中
@@ -235,7 +236,7 @@ export default {
       var orderList=[]
           this.multipleSelection = val;
           for (var i = 0; i < this.multipleSelection.length; i++) {
-            orderList.push(this.multipleSelection[i])
+            orderList.push(this.multipleSelection[i].id)
           }
           this.orderList=orderList
       },
@@ -247,15 +248,19 @@ export default {
               duration: 2500
             })
         }else{
-          import('@/utils/export2Excel').then(excel => {
-            const tHeader = ['合同编号', '合同状态','合同时间', '运输清单号', '托运单号', '托运单状态', '运单创建日期', '下单时间', '发货单位', '收货单位','货物名称','件数','起站','到站','车辆信息','司机信息','发车时间','投保结果','失败原因','确认金额','投保金额']
-           const filterVal= ['contractNo','contractStatus','contractDate', 'lotNo', 'systemOrderId','consignmentStatus', 'createDate', 'orderDate', 'shipperName', 'consigneeName','cargoName','cargoCount','departStation','arriveStation','headLicense','driverName','departDate','insureResult','insureReasons','insureMoney','confirmationAmount']
-            const data = this.formatJson(filterVal, this.orderList)
-            excel.export_json_to_excel({
-              header: tHeader,  //表头
-              data,             //数据
-              filename: '订单管理_'+this.parseTime(new Date()) //文件名
+          download(this.orderList).then(res => {
+            import('@/utils/export2Excel').then(excel => {
+              const tHeader = ['合同编号', '合同状态','合同时间', '运输清单号', '托运单号', '托运单状态', '运单创建日期', '下单时间', '发货单位', '收货单位','货物名称','件数','起站','到站','车辆信息','司机信息','发车时间','投保结果','失败原因','确认金额','投保金额']
+             const filterVal= ['contractNo','contractStatus','contractDate', 'lotNo', 'systemOrderId','consignmentStatus', 'createDate', 'orderDate', 'shipperName', 'consigneeName','cargoName','cargoCount','departStation','arriveStation','headLicense','driverName','departDate','insureResult','insureReasons','insureMoney','confirmationAmount']
+              const data = this.formatJson(filterVal, res.content)
+              excel.export_json_to_excel({
+                header: tHeader,  //表头
+                data,             //数据
+                filename: '订单管理_'+this.parseTime(new Date()) //文件名
+              })
             })
+          }).catch(err => {
+             console.log(err.response.data.message)
           })
         }
       },
