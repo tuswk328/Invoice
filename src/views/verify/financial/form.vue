@@ -26,8 +26,8 @@
               </el-form-item>
             </el-col>
             <el-col  v-if="isverify" :span="12">
-              <el-form-item label="税率" label-width="100px" prop="taxRate">
-                <el-input  v-model="form.taxRate"  style="width: 280px;"/>
+              <el-form-item label="税率" label-width="100px" prop="taxRate" >
+                <el-input  v-model.number="form.taxRate"  style="width: 280px;"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -169,7 +169,9 @@
             required: true,
             message: '请输入税率',
             trigger: 'blur'
-          }],
+          },
+      { type: 'number', message: '税率必须为数字值', trigger: 'blur'}
+    ],
           lnvoiceNumber: [{
             required: true,
             message: '请输入发票号码',
