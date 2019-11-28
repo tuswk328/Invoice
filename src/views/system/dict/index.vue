@@ -8,7 +8,7 @@
           <div slot="header" class="clearfix">
             <span>字典列表</span>
             <el-button
-              v-permission="['ADMIN','DICT_ALL','DICT_CREATE']"
+             v-permission="['ADMIN','DICT_ALL','DICT_CREATE']"
               class="filter-item"
               size="mini"
               style="float: right;padding: 4px 10px"
@@ -26,7 +26,7 @@
           <el-table v-loading="loading" :data="data" size="small" highlight-current-row style="width: 100%;" @current-change="handleCurrentChange">
             <el-table-column :show-overflow-tooltip="true" prop="name" label="名称"/>
             <el-table-column :show-overflow-tooltip="true" prop="remark" label="描述"/>
-            <el-table-column v-if="checkPermission(['ADMIN','DICT_ALL','DICT_EDIT','DICT_DELETE'])" label="操作" width="130px" align="center" fixed="right">
+            <el-table-column v-if="checkPermission(['ADMIN','DICT_ALL','DICT_EDIT','DICT_DELETE'])"  label="操作" width="130px" align="center" fixed="right">
               <template slot-scope="scope">
                 <el-button v-permission="['ADMIN','DICT_ALL','DICT_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
                 <el-popover
@@ -59,7 +59,7 @@
           <div slot="header" class="clearfix">
             <span>字典详情</span>
             <el-button
-              v-if="checkPermission(['ADMIN','DICT_ALL','DICT_CREATE']) && this.$refs.dictDetail && this.$refs.dictDetail.dictName"
+              v-if="checkPermission(['ADMIN','DICT_ALL','DICT_CREATE']) &&this.$refs.dictDetail && this.$refs.dictDetail.dictName"
               class="filter-item"
               size="mini"
               style="float: right;padding: 4px 10px"

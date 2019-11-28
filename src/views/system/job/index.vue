@@ -8,8 +8,8 @@
         <el-option v-for="item in enabledTypeOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
       </el-select>
       <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
-      <!-- 新增 -->
-      <div v-permission="['ADMIN','USERJOB_ALL','USERJOB_CREATE']" style="display: inline-block;margin: 0px 2px;">
+      <!-- 新增 v-permission="['ADMIN','USERJOB_ALL','USERJOB_CREATE']"-->
+      <div  style="display: inline-block;margin: 0px 2px;">
         <el-button
           class="filter-item"
           size="mini"
@@ -45,11 +45,13 @@
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="checkPermission(['ADMIN','USERJOB_ALL','USERJOB_EDIT','USERJOB_DELETE'])" label="操作" width="130px" align="center" fixed="right">
+      <!-- v-if="checkPermission(['ADMIN','USERJOB_ALL','USERJOB_EDIT','USERJOB_DELETE'])"-->
+      <el-table-column  label="操作" width="130px" align="center" fixed="right">
         <template slot-scope="scope">
-          <el-button v-permission="['ADMIN','USERJOB_ALL','USERJOB_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
+          <!-- v-permission="['ADMIN','USERJOB_ALL','USERJOB_EDIT']"-->
+          <el-button  size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
+          <!-- v-permission="['ADMIN','USERJOB_ALL','USERJOB_DELETE']"-->
           <el-popover
-            v-permission="['ADMIN','USERJOB_ALL','USERJOB_DELETE']"
             :ref="scope.row.id"
             placement="top"
             width="180">

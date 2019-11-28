@@ -20,8 +20,8 @@
             <el-option v-for="item in enabledTypeOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
           </el-select>
           <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
-          <!-- 新增 -->
-          <div v-permission="['ADMIN','USER_ALL','USER_CREATE']" style="display: inline-block;margin: 0px 2px;">
+          <!-- 新增 v-permission="['ADMIN','USER_ALL','USER_CREATE']"-->
+          <div  style="display: inline-block;margin: 0px 2px;">
             <el-button
               class="filter-item"
               size="mini"
@@ -69,11 +69,13 @@
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
           </el-table-column>
-          <el-table-column v-if="checkPermission(['ADMIN','USER_ALL','USER_EDIT','USER_DELETE'])" label="操作" width="125" align="center" fixed="right">
+          <!-- v-if="checkPermission(['ADMIN','USER_ALL','USER_EDIT','USER_DELETE'])"-->
+          <el-table-column  label="操作" width="125" align="center" fixed="right">
             <template slot-scope="scope">
-              <el-button v-permission="['ADMIN','USER_ALL','USER_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
+              <!-- v-permission="['ADMIN','USER_ALL','USER_EDIT']" -->
+              <el-button size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
+             <!-- v-permission="['ADMIN','USER_ALL','USER_DELETE']"-->
               <el-popover
-                v-permission="['ADMIN','USER_ALL','USER_DELETE']"
                 :ref="scope.row.id"
                 placement="top"
                 width="180">

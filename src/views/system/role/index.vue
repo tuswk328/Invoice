@@ -7,8 +7,8 @@
       <!-- 搜索 -->
       <el-input v-model="query.value" clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery"/>
       <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
-      <!-- 新增 -->
-      <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
+      <!-- 新增 v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']"-->
+      <div  style="display: inline-block;margin: 0px 2px;">
         <el-button
           class="filter-item"
           size="mini"
@@ -40,11 +40,13 @@
                 <span>{{ parseTime(scope.row.createTime) }}</span>
               </template>
             </el-table-column>
-            <el-table-column v-if="checkPermission(['ADMIN','ROLES_ALL','ROLES_EDIT','ROLES_DELETE'])" label="操作" width="130px" align="center" fixed="right">
+            <!-- v-if="checkPermission(['ADMIN','ROLES_ALL','ROLES_EDIT','ROLES_DELETE'])"-->
+            <el-table-column  label="操作" width="130px" align="center" fixed="right">
               <template slot-scope="scope">
-                <el-button v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
+                <!-- v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']"-->
+                <el-button  size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
+                <!-- v-permission="['ADMIN','ROLES_ALL','ROLES_DELETE']"-->
                 <el-popover
-                  v-permission="['ADMIN','ROLES_ALL','ROLES_DELETE']"
                   :ref="scope.row.id"
                   placement="top"
                   width="180">
@@ -75,8 +77,8 @@
             <el-tooltip class="item" effect="dark" content="选择指定角色分配菜单" placement="top">
               <span class="role-span">菜单分配</span>
             </el-tooltip>
+            <!-- v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']"-->
             <el-button
-              v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']"
               :disabled="!showButton"
               :loading="menuLoading"
               icon="el-icon-check"
@@ -99,8 +101,8 @@
             <el-tooltip class="item" effect="dark" content="选择指定角色分配权限" placement="top">
               <span class="role-span">权限分配</span>
             </el-tooltip>
+            <!-- v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']"-->
             <el-button
-              v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']"
               :disabled="!showButton"
               :loading="permissionLoading"
               icon="el-icon-check"

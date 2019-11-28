@@ -47,7 +47,7 @@
         <template slot-scope="scope">
           <el-button v-permission="['ADMIN','DEPT_ALL','DEPT_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
           <el-popover
-            v-permission="['ADMIN','DEPT_ALL','DEPT_DELETE']"
+          v-permission="['ADMIN','DEPT_ALL','DEPT_DELETE']"
             :ref="scope.row.id"
             placement="top"
             width="180">
