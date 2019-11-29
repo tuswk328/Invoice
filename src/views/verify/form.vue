@@ -70,7 +70,11 @@
       <el-divider content-position="left">审批日志</el-divider>
       <el-table v-loading="loading" :data="data" size="small" style="width: 100%;">
         <el-table-column  prop="nickName" label="审批人"/>
-        <el-table-column  prop="approvalTime" label="审批时间"/>
+          <el-table-column  prop="approvalTime" label="审批时间">
+            <template slot-scope="scope">
+              <span>{{DateTime(scope.row.approvalTime)}}</span>
+            </template>
+        </el-table-column>
         <el-table-column  prop="approvalStatus" label="审批结果">
             <template slot-scope="scope">
               <span>{{parseStatus(scope.row.approvalStatus)}}</span>
@@ -93,7 +97,7 @@
 
 <script>
 import initData from '@/mixins/initData'
-import { parseTime,number_format,parseStatus } from '@/utils/index'
+import { DateTime,parseTime,number_format,parseStatus } from '@/utils/index'
 import {lnvoiceCommonList} from '@/utils/common'
 export default {
   mixins: [initData],
@@ -117,6 +121,7 @@ export default {
     parseStatus,
     number_format,
     parseTime,
+    DateTime,
     beforeInit() {
       this.url = 'api/findByAuditLog/'+this.lnvoiceId
       const query = this.query

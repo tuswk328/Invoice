@@ -281,6 +281,8 @@
           findByLnvoiceInfo(this.vertifys[0]).then(res => {
             if (res != '') {
               _this.form = res
+                _this.form.contCost=this.number_format(res.contCost)
+            _this.form.lnvoiceMoney=this.number_format(res.lnvoiceMoney)
               //运营审核才能进行审核
                 _this.lnvoiceId=this.vertifys[0]
                 _this.init()
@@ -313,6 +315,8 @@
           findByLnvoiceInfo(this.vertifys[0]).then(res => {
             if (res != '') {
               _this.form = res
+                _this.form.contCost=this.number_format(res.contCost)
+            _this.form.lnvoiceMoney=this.number_format(res.lnvoiceMoney)
               //财务已审才能开票
                 _this.lnvoiceId=this.vertifys[0]
                 _this.init()

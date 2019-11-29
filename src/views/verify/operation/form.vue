@@ -41,6 +41,7 @@
             <el-col :span="12">
               <el-form-item label="确认金额" label-width="100px">
                 <el-input disabled v-model="form.contCost" style="width: 150px;" />
+                
               </el-form-item>
             </el-col>
             <el-col :span="12">

@@ -269,6 +269,8 @@
           findByLnvoiceInfo(this.vertifys[0]).then(res => {
             if (res != '') {
               _this.form = res
+                _this.form.contCost=this.number_format(res.contCost)
+            _this.form.lnvoiceMoney=this.number_format(res.lnvoiceMoney)
               _this.lnvoiceId=this.vertifys[0]
               _this.init()
             }
