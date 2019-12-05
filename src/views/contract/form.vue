@@ -40,7 +40,7 @@
         </el-col>
         <el-col :span="12">
            <el-form-item label="创建日期" prop="createDate" label-width="120px">
-             <el-date-picker :disabled="disabled"   v-model="form.createDate" type="date"  value-format="yyyy-MM-dd"
+             <el-date-picker disabled   v-model="form.createDate" type="date"  value-format="yyyy-MM-dd"
              placeholder="选择日期" style="width: 170px;">
              </el-date-picker>
           </el-form-item>
@@ -172,7 +172,7 @@ export default {
         carrierId: '',
         startDate: null,
         endDate: null,
-         createDate:this.getNowTime(),  //日期
+         createDate:'',  //日期
         contractNum: '',
         contractTitle: '',
         contractName: '',
@@ -213,19 +213,6 @@ export default {
     cancel() {
       this.resetForm()
     },
-    getNowTime() {
-       var now = new Date();
-       var year = now.getFullYear(); //得到年份
-       var month = now.getMonth(); //得到月份
-       var date = now.getDate(); //得到日期
-       month = month + 1;
-       month = month.toString().padStart(2, "0");
-       date = date.toString().padStart(2, "0");
-       var defaultDate = `${year}-${month}-${date}`;
-        return defaultDate;
-          console.log(defaultDate)
-       this.$set(this.form, "createDate", defaultDate);
-   },
     doSubmit() {
       this.$refs['form'].validate((valid) => {  //校验表单
         if (valid) {

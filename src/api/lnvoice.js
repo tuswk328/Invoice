@@ -7,6 +7,21 @@ export function findLnvoiceContract() {
   })
 }
 
+export function findByContId(id) {
+  return request({
+    url: 'api/findByContId/'+id,
+    method: 'get',
+    id
+  })
+}
+export function findLnvoiciedContract(id) {
+  return request({
+    url: 'api/findLnvoiciedContract/'+id,
+    method: 'get',
+    id
+  })
+}
+
 export function findBySaveLnvoice(id) {
   return request({
     url: 'api/findBySaveLnvoice/'+id,

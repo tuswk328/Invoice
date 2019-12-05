@@ -229,6 +229,7 @@ export default {
           this.$set(this.query,'endDate',null)
           this.$set(this.query,'headLicense','')
           this.$set(this.query,'consignmentStatus','')
+          this.$set(this.query,'lnvoiceStatus','')
           this.init()
       },
       //批量操作
@@ -250,8 +251,8 @@ export default {
         }else{
           download(this.orderList).then(res => {
             import('@/utils/export2Excel').then(excel => {
-              const tHeader = ['合同编号', '合同状态','合同时间', '运输清单号', '托运单号', '托运单状态', '运单创建日期', '下单时间', '发货单位', '收货单位','货物名称','件数','起站','到站','车辆信息','司机信息','发车时间','投保结果','失败原因','确认金额','投保金额']
-             const filterVal= ['contractNo','contractStatus','contractDate', 'lotNo', 'systemOrderId','consignmentStatus', 'createDate', 'orderDate', 'shipperName', 'consigneeName','cargoName','cargoCount','departStation','arriveStation','headLicense','driverName','departDate','insureResult','insureReasons','insureMoney','confirmationAmount']
+            const tHeader = ['合同编号', '合同状态','合同时间', '运输清单号', '托运单号', '托运单状态', '运单创建日期', '下单时间','运费', '发货单位','出发地(省)' ,'出发地(市)','出发地(县)','收货单位','收货人联系手机','到达地-省','到达地-市','到达地-县','收货地址','货物名称','件数','重量' ,'体积', '起站','到站','车辆信息','司机信息','驾驶员手机号','挂车号码' ,'挂车类型', '发车时间','投保结果','失败原因','确认金额','投保金额']
+           const filterVal= ['contractNo','contractStatus','contractDate', 'lotNo', 'systemOrderId','consignmentStatus', 'createDate', 'orderDate','cargoFreight',  'shipperName', 'departProvince' ,'departCity' ,'departDistrict' ,' consigneeName','consigneePhone','destinationProvice','destinationCity','destinationDistrict','deliveryAddress' ,'cargoName','cargoCount','cargoWeight','volume','departStation','arriveStation','headLicense','driverName','driverPhone','trailerLicense','trailerType' ,'departDate','insureResult','insureReasons','insureMoney','confirmationAmount']
               const data = this.formatJson(filterVal, res.content)
               excel.export_json_to_excel({
                 header: tHeader,  //表头

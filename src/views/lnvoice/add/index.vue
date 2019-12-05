@@ -59,7 +59,6 @@
         <!-- v-permission="['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_VERTIFY']" -->
       <div style="display: inline-block;margin: 0px 2px;">
         <el-button
-
           class="filter-item"
           :loading="vertifyLoading"
           size="mini"
@@ -100,7 +99,7 @@ import eForm from './form'
 import { gerDeptScope} from '@/api/dept'
 import { parseTime } from '@/utils/index'
 import store from '@/store'
-import { findLnvoiceContract,findBySaveLnvoice } from '@/api/lnvoice'
+import { findLnvoiceContract,findBySaveLnvoice,findByContId,findLnvoiciedContract } from '@/api/lnvoice'
 import { findByDrawweAndConDate,getBindingContractByDrawwe } from '@/api/bindingContract.js'
 
 export default {
@@ -197,24 +196,30 @@ export default {
           this.$refs.form.contractId = this.vertifys[0].id
           _this.form = {
             drawwe: this.vertifys[0].drawwe,
-            lnvoiceMoney: this.vertifys[0].contCost,
             contCost: this.vertifys[0].contCost,
           }
           _this.dialog = true
+            _this.init()
           /* 根据受票人日期查询承运方集合*/
           findByDrawweAndConDate(this.vertifys[0]).then(res => {
              this.$refs.form.carrierList=res
           }).catch(err => {
              console.log(err.response.data.message)
           })
+          findLnvoiciedContract(this.vertifys[0].id).then(res => {
+             this.$refs.form.lnvoicedMoney=res.invoicedAmount
+          }).catch(err => {
+             console.log(err.response.data.message)
+          })
+
        }
      },
      //查询受票人
       getBindingContractByDrawwe(){
-      getBindingContractByDrawwe().then(res => {
-        this.drawweList=res
-      }).catch(err => {
-      })
+        getBindingContractByDrawwe().then(res => {
+          this.drawweList=res
+        }).catch(err => {
+        })
       },
       getCarrier(){
       //查询承运方

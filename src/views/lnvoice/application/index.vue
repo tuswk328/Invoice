@@ -104,7 +104,7 @@
         <!-- v-permission="['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EXPORT']" -->
     <div style="display: inline-block;">
       <el-button
-    
+
         :loading="downloadLoading"
         size="mini"
         class="filter-item"
@@ -288,8 +288,6 @@ export default {
         import("@/utils/export2Excel").then(excel => {
           const tHeader = [
             "申请单号",
-            "合同号",
-            "合同日期",
             "申请单状态",
             "受票人",
             "承运方",
@@ -306,8 +304,6 @@ export default {
           ];
           const filterVal = [
             "lnvoiceOrder",
-            "contNo",
-            "contDate",
             "lnvoiceStatus",
             "drawwe",
             "carrier",
@@ -345,7 +341,6 @@ export default {
       return jsonData.map(v =>
         filterVal.map(j => {
           if (
-            j === "contDate" ||
             j === "operationDate" ||
             j === "creatDate" ||
             j === "financialDate"

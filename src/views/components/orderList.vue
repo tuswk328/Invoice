@@ -1,6 +1,7 @@
 <template>
   <div >
-    <el-table  @selection-change="handleSelectionChange" :v-loading="loading" :data="data" size="small" style="width: 100%;">
+    <el-table :summary-method="getSummaries"
+    show-summary @selection-change="handleSelectionChange" :v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column width="55" type="selection"/>
       <el-table-column label="合同号" prop="contractNo" width="150" />
       <el-table-column  prop="contractStatus" label="合同状态"/>
@@ -83,7 +84,7 @@
         }else{
           import('@/utils/export2Excel').then(excel => {
             const tHeader = ['合同编号', '合同状态','合同时间', '运输清单号', '托运单号', '托运单状态', '运单创建日期', '下单时间', '发货单位', '收货单位','货物名称','件数','起站','到站','车辆信息','司机信息','发车时间','投保结果','失败原因','确认金额','投保金额']
-           const filterVal= ['contractNo','contractStatus','contractDate', 'lotNo', 'systemOrderId','consignmentStatus', 'createDate', 'orderDate', 'shipperName', 'consigneeName','cargoName','cargoCount','departStation','arriveStation','headLicense','driverName','departDate','insureResult','insureReasons','insureMoney','confirmationAmount']
+            const filterVal= ['contractNo','contractStatus','contractDate', 'lotNo', 'systemOrderId','consignmentStatus', 'createDate', 'orderDate', 'shipperName', 'consigneeName','cargoName','cargoCount','departStation','arriveStation','headLicense','driverName','departDate','insureResult','insureReasons','insureMoney','confirmationAmount']
             const data = this.formatJson(filterVal, this.orderList)
             excel.export_json_to_excel({
               header: tHeader,  //表头
@@ -104,6 +105,34 @@
           }
         }))
       },
+      //数据金额
+       getSummaries(param) {
+        const { columns, data } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = '总价';
+            return;
+          }
+         else if (index === 22||index === 21) {
+            const values = data.map(item => Number(item[column.property]));
+            if (!values.every(value => isNaN(value))) {
+              sums[index] = values.reduce((prev, curr) => {
+                const value = Number(curr);
+                if (!isNaN(value)) {
+                  return prev + curr;
+                } else {
+                  return prev;
+                }
+              }, 0);
+              sums[index] += ' 元';
+            } else {
+              sums[index] = 'N/A';
+            }
+          }
+        });
+        return sums;
+      }
     }
   }
 

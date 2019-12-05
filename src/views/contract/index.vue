@@ -93,7 +93,7 @@
             <!-- v-permission="['ADMIN','CONTRACT_ALL','CONTRACT_CREATE']" -->
           <div style="display: inline-block;margin: 0px 2px;">
             <el-button
-            
+
               class="filter-item"
               size="mini"
               type="primary"
@@ -105,7 +105,7 @@
               <!-- v-permission="['ADMIN','RENTCONTRACT_ALL','RENTCONTRACT_CANCEL']" -->
           <div style="display: inline-block;margin: 0px 2px;">
             <el-button
-          
+
               class="filter-item"
               size="mini"
               type="danger"
@@ -117,7 +117,7 @@
            <!-- v-permission="['ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EXPORT']" -->
           <div style="display: inline-block;">
             <el-button
-             
+
               :loading="downloadLoading"
               size="mini"
               class="filter-item"
@@ -300,6 +300,20 @@ export default {
     add() {
       this.isAdd = false;
       this.$refs.form.dialog = true;
+      this.$refs.form.form.createDate= this.getNowTime()
+    },
+    getNowTime() {
+        var now = new Date();
+        var year = now.getFullYear(); //得到年份
+        var month = now.getMonth(); //得到月份
+        var date = now.getDate(); //得到日期
+        month = month + 1;
+        month = month.toString().padStart(2, "0");
+        date = date.toString().padStart(2, "0");
+        var defaultDate = `${year}-${month}-${date}`;
+         return defaultDate;
+           console.log(defaultDate)
+        this.$set(this.form, "createDate", defaultDate);
     },
     //作废
     cancel() {
@@ -321,8 +335,7 @@ export default {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        })
-          .then(() => {
+        }).then(() => {
             bindingContractCancel(this.vertifys[0])
               .then(res => {
                 this.$notify({

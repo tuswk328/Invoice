@@ -4,7 +4,7 @@
       <el-tab-pane name="first" label="审批信息管理">
         <el-form ref="form" :rules="rules" :model="form" size="small" label-width="660px">
           <el-divider content-position="left">审核信息</el-divider>
-          
+
           <el-row>
             <el-col :span="24">
               <el-form-item label="受票人" label-width="100px">
@@ -31,16 +31,16 @@
               </el-form-item>
             </el-col>
           </el-row>
-          
+
           <el-row>
             <el-col :span="12">
               <el-form-item label="确认金额" label-width="100px">
-                <el-input disabled v-model="form.contCost" style="width: 280px;" />
+                <el-input disabled v-model="contCost" style="width: 280px;" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="开票金额" label-width="100px">
-                <el-input disabled v-model="form.lnvoiceMoney" style="width: 280px;" />
+                <el-input disabled v-model="lnvoiceMoney" style="width: 280px;" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -69,7 +69,7 @@
           <el-row v-if="!isverify">
             <el-col :span="12">
               <el-form-item label="审核" label-width="100px" prop="newlnvoiceStatus">
-                <el-select v-model="form.newlnvoiceStatus" clearable filterable placeholder="请选择申请单状态" 
+                <el-select v-model="form.newlnvoiceStatus" clearable filterable placeholder="请选择申请单状态"
                 @change="selectOne" value-key="value" style="width: 200px;">
                   <el-option v-for="item in lnvoiceStatusList" :key="item.id" :label="item.label" :value="item"
                   >
@@ -87,7 +87,7 @@
           </el-row>
           <div style="text-align: right;">
             <el-button type="text" @click="cancel">取消</el-button>
-            <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+            <el-button :loading="subLoading" type="primary" @click="doSubmit">确认</el-button>
           </div>
         </el-form>
       </el-tab-pane>
@@ -136,6 +136,8 @@
     },
     data() {
       return {
+        contCost:'',//用于显示合同金额
+        lnvoiceMoney:'',//用于显示开票金额
         lnvoiceStatusList: [ //申请单状态集合
           {
             value: 3,
@@ -154,6 +156,7 @@
         lnvoiceId: '', //用于保存父组件传过来的申请单id
         activeName: 'first',
         loading: false,
+        subLoading:false,
         dialog: false,
         form: {},
         rules: { //表达验证
@@ -190,7 +193,6 @@
       number_format,
       parseTime,
       selectOne(item) {     //change 触发事件
-      
          this.form.financialComments = item.label
         },
       beforeInit() {
@@ -211,7 +213,7 @@
       doSubmit() {
         this.$refs['form'].validate((valid) => { //校验表单
           if (valid) {
-            this.loading = true
+            this.subLoading = true
               this.doVerify()
           } else {
             return false
@@ -232,15 +234,15 @@
                    duration: 2500
                  })
                  this.resetForm()
-                 this.loading = false
+                 this.subLoading = false
                  this.$parent.init()
                }).catch(err => {
-                 this.loading = false
+                 this.subLoading = false
                  console.log(err.response.data.message)
                })
              }
              else{
-               this.loading = false
+               this.subLoading = false
                this.$notify({
                  title: '状态不符,请勿重复操作',
                  type: 'error',
@@ -258,15 +260,15 @@
                   duration: 2500
                 })
                 this.resetForm()
-                this.loading = false
+                this.subLoading = false
                 this.$parent.init()
               }).catch(err => {
-                this.loading = false
+                this.subLoading = false
                 console.log(err.response)
               })
             }
             else{
-              this.loading = false
+              this.subLoading = false
               this.$notify({
                 title: '状态不符,请勿重复操作',
                 type: 'error',

@@ -219,10 +219,10 @@
         } else {
           this.downloadLoading = true
           import('@/utils/export2Excel').then(excel => {
-            const tHeader = ['申请单号', '合同号', '合同日期', '申请单状态', '受票人', '承运方', '开票金额', '申请人', '申请时间', '运营审核人', '运营审核时间',
+            const tHeader = ['申请单号', '申请单状态', '受票人', '承运方', '开票金额', '申请人', '申请时间', '运营审核人', '运营审核时间',
               '运营审核意见', '财务审核人', '财务审核时间', '财务审核意见', '发票号码'
             ]
-            const filterVal = ['lnvoiceOrder', 'contNo', 'contDate', 'lnvoiceStatus', 'drawwe',
+            const filterVal = ['lnvoiceOrder', 'lnvoiceStatus', 'drawwe',
               'carrier', 'lnvoiceMoney', 'creatorName', 'creatDate',
               'operationName', 'operationDate', 'operationComments', 'financialName',
               'financialDate', 'financialComments', 'lnvoiceNumber'
@@ -231,7 +231,7 @@
             excel.export_json_to_excel({
               header: tHeader, //表头
               data, //数据
-              filename: '开票管理_' + this.parseTime(new Date()) //文件名
+              filename: '运营审核管理_' + this.parseTime(new Date()) //文件名
             })
           })
           this.downloadLoading = false
@@ -240,7 +240,7 @@
       // 数据转换
       formatJson(filterVal, jsonData) {
         return jsonData.map(v => filterVal.map(j => {
-          if (j === 'contDate' || j === 'operationDate' || j === 'creatDate' || j === 'financialDate') {
+          if ( j === 'operationDate' || j === 'creatDate' || j === 'financialDate') {
             return parseTime(v[j])
           } else if (j === 'lnvoiceStatus') {
             return parseStatus(v[j])
@@ -269,8 +269,8 @@
           findByLnvoiceInfo(this.vertifys[0]).then(res => {
             if (res != '') {
               _this.form = res
-                _this.form.contCost=this.number_format(res.contCost)
-            _this.form.lnvoiceMoney=this.number_format(res.lnvoiceMoney)
+                _this.contCost=this.number_format(res.contCost)
+            _this.lnvoiceMoney=this.number_format(res.lnvoiceMoney)
               _this.lnvoiceId=this.vertifys[0]
               _this.init()
             }

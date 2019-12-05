@@ -40,13 +40,13 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="确认金额" label-width="100px">
-                <el-input disabled v-model="form.contCost" style="width: 150px;" />
-                
+                <el-input disabled v-model="contCost" style="width: 150px;" />
+
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="开票金额" label-width="100px">
-                <el-input disabled v-model="form.lnvoiceMoney" style="width: 150px;" />
+                <el-input disabled v-model="lnvoiceMoney" style="width: 150px;" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -84,7 +84,7 @@
           </el-row>
           <div style="text-align: right;">
             <el-button type="text" @click="cancel">取消</el-button>
-            <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+            <el-button :loading="subLoading" type="primary" @click="doSubmit">确认</el-button>
           </div>
         </el-form>
       </el-tab-pane>
@@ -128,6 +128,8 @@
     props: {},
     data() {
       return {
+        contCost:'',//用于显示合同金额
+        lnvoiceMoney:'',//用于显示开票金额
         lnvoiceStatusList: [ //申请单状态集合
           {
             value: 2,
@@ -145,7 +147,8 @@
         lnvoiceCommonList: lnvoiceCommonList, //保存申请单状态集合
         lnvoiceId: '', //用于保存父组件传过来的申请单id
         activeName: 'first',
-        loading: false,
+        loading:false,
+        subLoading: false,
         dialog: false,
         form: {},
         rules: { //表达验证
@@ -170,7 +173,7 @@
       number_format,
       parseTime,
       selectOne(item) {     //change 触发事件
-      
+
          this.form.operationComments = item.label
         },
       beforeInit() {
@@ -192,7 +195,7 @@
       doSubmit() {
         this.$refs['form'].validate((valid) => { //校验表单
           if (valid) {
-            this.loading = true
+            this.subLoading = true
             this.doVerify()
           } else {
             return false
@@ -211,10 +214,10 @@
               duration: 2500
             })
             this.resetForm()
-            this.loading = false
+            this.subLoading = false
             this.$parent.init()
           }).catch(err => {
-            this.loading = false
+            this.subLoading = false
             console.log(err.response.data.message)
           })
         })
